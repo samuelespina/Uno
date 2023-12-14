@@ -1,0 +1,13 @@
+<div class="home-page-container">
+  <button [disabled]="!startGameStatus" (click)="TakeYourMatch()">
+    start game
+  </button>
+  <div class="bot-number-selection">
+    <button (click)="AddOrSubtractBot('-')">-</button>
+    <p>{{ botNUmber }}</p>
+    <button (click)="AddOrSubtractBot('+')">+</button>
+  </div>
+  <button [disabled]="startGameStatus" (click)="TakeYourMatch()">
+    resume game
+  </button>
+</div>

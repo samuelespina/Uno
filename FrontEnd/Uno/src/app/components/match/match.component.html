@@ -1,0 +1,23 @@
+<div class="match-page-container">
+  <div class="opponents-hands-wrapper">
+    <div class="hand" *ngFor="let hand of opponentHandsLength; index as i">
+      <app-card
+        [ngStyle]="{
+          width:
+            calcolaNumeroInversamenteProporzionale(opponentHandsLength.length) +
+            'rem'
+        }"
+        *ngFor="let card of Iterate(hand)"
+      ></app-card>
+    </div>
+  </div>
+  <div class="my-hand-wrapper">
+    <div class="hand">
+      <app-card
+        *ngFor="let card of myHand; index as i"
+        [cardNumber]="card.Value"
+      >
+      </app-card>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,8 @@
+.card {
+  height: 15rem;
+  width: 10rem;
+  border: 5px solid black;
+  border-radius: 1rem;
+  background-color: violet;
+  margin-left: -5rem;
+}
