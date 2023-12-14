@@ -16,6 +16,7 @@ import { CardComponent } from '../card/card.component';
 })
 export class MatchComponent implements OnInit {
   myHand!: Array<Card>;
+  myHandCardCoordinates: Array<Array<number>> = [];
   opponentHandsLength!: Array<number>;
   lastCard!: Card;
 
@@ -40,6 +41,7 @@ export class MatchComponent implements OnInit {
         .subscribe({
           next: async (myHand) => {
             this.myHand = myHand;
+            this.CardCalc();
             console.log('START MATCH ' + this.myHand);
             const opponentHandLengthSubscription: Subscription =
               this.matchService.TakeOpponentHandLength(params).subscribe({
@@ -72,6 +74,7 @@ export class MatchComponent implements OnInit {
         .subscribe({
           next: (myHand) => {
             this.myHand = myHand;
+            this.CardCalc();
             console.log(this.myHand);
             const opponentHandLengthSubscription: Subscription =
               this.matchService.TakeOpponentHandLength(params).subscribe({
@@ -105,8 +108,27 @@ export class MatchComponent implements OnInit {
     return new Array(num).fill(null);
   }
 
-  calcolaNumeroInversamenteProporzionale(x: number): number {
-    const k = 5; // Puoi regolare questo valore per ottenere l'effetto desiderato
+  SpaceCalc(x: number): number {
+    const k = 5;
     return k / x;
+  }
+
+  CardCalc() {
+    for (let i = 0; i < this.myHand.length; i++) {
+      let cardCoordinates: Array<number> = [];
+      if (this.myHand[i].Value >= 0 && this.myHand[i].Value <= 9) {
+        let number = 140 * this.myHand[i].Value + 19;
+        cardCoordinates.push(number);
+      } else {
+        cardCoordinates.push(0);
+      }
+      if (this.myHand[i].Color != 4) {
+        let color = 210 * this.myHand[i].Color + 15;
+        cardCoordinates.push(color);
+      } else {
+        cardCoordinates.push(0);
+      }
+      this.myHandCardCoordinates.push(cardCoordinates);
+    }
   }
 }

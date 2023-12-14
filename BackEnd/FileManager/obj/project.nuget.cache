@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "AQmSWzIZ8FGos7vVsvCj+qNdEXRq6IyIc5PT5sZJYm6zh4QjLELJ3BMuAftNw5rJ9znLWgtViSmk5uAroiMnTQ==",
+  "dgSpecHash": "HYNPc52x7k0LBPLjDzNR1+LJ5AOC0cFhtTfIvES5/EmMq8YLtbsd9/4NaD3/D3QSvfPEYz5gGTlcMtD2x9eCuQ==",
   "success": true,
-  "projectFilePath": "/Users/samuele_spina/Desktop/Uno/BackEnd/FileManager/FileManager.csproj",
+  "projectFilePath": "/Users/samuele_spina/Desktop/FinalProject/BackEnd/FileManager/FileManager.csproj",
   "expectedPackageFiles": [
     "/Users/samuele_spina/.nuget/packages/newtonsoft.json/13.0.3/newtonsoft.json.13.0.3.nupkg.sha512"
   ],

@@ -3,9 +3,9 @@ using CardModel;
 public enum CardColor
 {
     Red,
-    Blue,
     Yellow,
     Green,
+    Blue,
     Wild
 }
 

@@ -3,9 +3,7 @@
     <div class="hand" *ngFor="let hand of opponentHandsLength; index as i">
       <app-card
         [ngStyle]="{
-          width:
-            calcolaNumeroInversamenteProporzionale(opponentHandsLength.length) +
-            'rem'
+          width: SpaceCalc(opponentHandsLength.length) + 'rem'
         }"
         *ngFor="let card of Iterate(hand)"
       ></app-card>
@@ -14,9 +12,10 @@
   <div class="my-hand-wrapper">
     <div class="hand">
       <app-card
-        *ngFor="let card of myHand; index as i"
-        [cardNumber]="card.Value"
-      >
+        *ngFor="let card of myHandCardCoordinates; index as i"
+        [value]="myHandCardCoordinates[i][0]"
+        [color]="myHandCardCoordinates[i][1]"
+        >{{ myHandCardCoordinates[i][0] }} {{ myHandCardCoordinates[i][1] }}
       </app-card>
     </div>
   </div>

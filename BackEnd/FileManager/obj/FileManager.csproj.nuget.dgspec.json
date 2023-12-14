@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "/Users/samuele_spina/Desktop/Uno/BackEnd/FileManager/FileManager.csproj": {}
+    "/Users/samuele_spina/Desktop/FinalProject/BackEnd/FileManager/FileManager.csproj": {}
   },
   "projects": {
-    "/Users/samuele_spina/Desktop/Uno/BackEnd/FileManager/FileManager.csproj": {
+    "/Users/samuele_spina/Desktop/FinalProject/BackEnd/FileManager/FileManager.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "/Users/samuele_spina/Desktop/Uno/BackEnd/FileManager/FileManager.csproj",
+        "projectUniqueName": "/Users/samuele_spina/Desktop/FinalProject/BackEnd/FileManager/FileManager.csproj",
         "projectName": "FileManager",
-        "projectPath": "/Users/samuele_spina/Desktop/Uno/BackEnd/FileManager/FileManager.csproj",
+        "projectPath": "/Users/samuele_spina/Desktop/FinalProject/BackEnd/FileManager/FileManager.csproj",
         "packagesPath": "/Users/samuele_spina/.nuget/packages/",
-        "outputPath": "/Users/samuele_spina/Desktop/Uno/BackEnd/FileManager/obj/",
+        "outputPath": "/Users/samuele_spina/Desktop/FinalProject/BackEnd/FileManager/obj/",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "/Users/samuele_spina/.nuget/NuGet/NuGet.Config"

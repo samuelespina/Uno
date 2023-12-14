@@ -1,1 +1,7 @@
-<div class="card">{{ cardNumber }}</div>
+<div
+  class="card"
+  [style.background-image]="'url(assets/img/UnoCards.png)'"
+  [ngStyle]="{
+    'background-position': '-' + value + 'px ' + '-' + color + 'px'
+  }"
+></div>

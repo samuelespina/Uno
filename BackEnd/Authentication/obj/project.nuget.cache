@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "hOtQ0AZcrGuNiRi30udsRJ2g6hzQ+pMQ6nQtDEKs9eRYQXvBHe2gvof0gJoFP0EMdtidixErdvdAD/cXQWvSXQ==",
+  "dgSpecHash": "dcG5t8l81DXClxtBN1hRROSlfkOmF5QrQNYq/r100tvXRk87h/TE4AjId5AEMSgzI8TM7p2iktQBWjCp48cZng==",
   "success": true,
-  "projectFilePath": "/Users/samuele_spina/Desktop/Uno/BackEnd/Authentication/Authentication.csproj",
+  "projectFilePath": "/Users/samuele_spina/Desktop/FinalProject/BackEnd/Authentication/Authentication.csproj",
   "expectedPackageFiles": [
     "/Users/samuele_spina/.nuget/packages/microsoft.aspnet.webapi.client/5.2.6/microsoft.aspnet.webapi.client.5.2.6.nupkg.sha512",
     "/Users/samuele_spina/.nuget/packages/microsoft.aspnetcore.authentication.abstractions/2.2.0/microsoft.aspnetcore.authentication.abstractions.2.2.0.nupkg.sha512",
