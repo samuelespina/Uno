@@ -1,6 +1,11 @@
 <div
   class="card"
-  [style.background-image]="'url(assets/img/UnoCards.png)'"
+  [ngClass]="enemyOrNot ? 'enemy-card' : ''"
+  [style.background-image]="
+    !enemyOrNot
+      ? 'url(assets/img/UnoCards.png)'
+      : 'url(assets/img/UnoCardFromBack.png)'
+  "
   [ngStyle]="{
     'background-position': '-' + value + 'px ' + '-' + color + 'px'
   }"

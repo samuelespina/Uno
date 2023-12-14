@@ -5,6 +5,7 @@
         [ngStyle]="{
           width: SpaceCalc(opponentHandsLength.length) + 'rem'
         }"
+        [enemyOrNot]="true"
         *ngFor="let card of Iterate(hand)"
       ></app-card>
     </div>

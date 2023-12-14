@@ -9,6 +9,7 @@ import { Component, Input } from '@angular/core';
   styleUrl: './card.component.css',
 })
 export class CardComponent {
+  @Input() enemyOrNot: boolean = false;
   @Input() color!: number;
   @Input() value!: number;
 }

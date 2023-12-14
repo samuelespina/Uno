@@ -8,3 +8,8 @@
   /*-19 -15*/
   /*-140 -210*/
 }
+
+.enemy-card {
+  background-size: cover;
+  height: 13.8rem;
+}
