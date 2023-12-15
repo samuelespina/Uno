@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, Input } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 
 @Component({
   selector: 'app-card',
@@ -12,4 +12,5 @@ export class CardComponent {
   @Input() enemyOrNot: boolean = false;
   @Input() color!: number;
   @Input() value!: number;
+  @Input() isHandCard: boolean = true;
 }

@@ -21,8 +21,8 @@ public enum CardValue
     Seven,
     Eight,
     Nine,
-    Reverse,
     Skip,
+    Reverse,
     DrawTwo,
     DrawFour,
     Wild

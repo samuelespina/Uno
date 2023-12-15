@@ -10,7 +10,18 @@
       ></app-card>
     </div>
   </div>
+  <div class="table-wrapper">
+    <div class="table">
+      <app-card [isHandCard]="false" [enemyOrNot]="true"></app-card>
+      <app-card
+        [isHandCard]="false"
+        [value]="myHandCardCoordinates[0][0]"
+        [color]="myHandCardCoordinates[0][1]"
+      ></app-card>
+    </div>
+  </div>
   <div class="my-hand-wrapper">
+    <button class="next">next</button>
     <div class="hand">
       <app-card
         *ngFor="let card of myHandCardCoordinates; index as i"

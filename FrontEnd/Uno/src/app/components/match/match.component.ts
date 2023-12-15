@@ -116,18 +116,36 @@ export class MatchComponent implements OnInit {
   CardCalc() {
     for (let i = 0; i < this.myHand.length; i++) {
       let cardCoordinates: Array<number> = [];
-      if (this.myHand[i].Value >= 0 && this.myHand[i].Value <= 9) {
+      if (this.myHand[i].Value >= 0 && this.myHand[i].Value <= 11) {
         let number = 140 * this.myHand[i].Value + 19;
         cardCoordinates.push(number);
-      } else {
-        cardCoordinates.push(0);
       }
       if (this.myHand[i].Color != 4) {
         let color = 210 * this.myHand[i].Color + 15;
         cardCoordinates.push(color);
-      } else {
-        cardCoordinates.push(0);
       }
+
+      if (this.myHand[i].Value == 12) {
+        let color = 140 * this.myHand[i].Color + 19;
+        let number = 855;
+        cardCoordinates.push(color);
+        cardCoordinates.push(number);
+      }
+
+      if (this.myHand[i].Value == 13) {
+        let color = 579;
+        let number = 855;
+        cardCoordinates.push(color);
+        cardCoordinates.push(number);
+      }
+
+      if (this.myHand[i].Value == 14) {
+        let color = 859;
+        let number = 855;
+        cardCoordinates.push(color);
+        cardCoordinates.push(number);
+      }
+
       this.myHandCardCoordinates.push(cardCoordinates);
     }
   }
