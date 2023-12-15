@@ -7,6 +7,7 @@ import { StartGame } from '../../Interfaces/StartGame.types';
 import { CommonModule } from '@angular/common';
 import { CardComponent } from '../card/card.component';
 import { DiscardObj } from '../../Interfaces/DiscardObj.types';
+import { OpponentMove } from '../../Interfaces/OpponentMove.types';
 
 @Component({
   selector: 'app-match',
@@ -21,6 +22,7 @@ export class MatchComponent implements OnInit {
   opponentHandsLength!: Array<number>;
   lastCard!: Card;
   lastCardCoordinates: Array<Array<number>> = [];
+  playingPlayerIndex: number = 0;
 
   constructor(private matchService: MatchService) {}
 
@@ -186,57 +188,90 @@ export class MatchComponent implements OnInit {
   }
 
   DrawCard() {
-    const params: HttpParams = new HttpParams()
-      .set('playerId', localStorage.getItem('id')!)
-      .set('token', localStorage.getItem('token')!);
+    if (this.playingPlayerIndex == 0) {
+      const params: HttpParams = new HttpParams()
+        .set('playerId', localStorage.getItem('id')!)
+        .set('token', localStorage.getItem('token')!);
 
-    const drawCardSubscription: Subscription = this.matchService
-      .DrawCard(params)
-      .subscribe({
-        next: (newCard: Card) => {
-          console.log(newCard);
-          this.lastCard = newCard;
-          this.myHand.push(newCard);
-          this.myHandCardCoordinates = [];
-          this.MyCardCalc();
-        },
-        error: (err) => console.log(err.error),
-        complete: () => drawCardSubscription.unsubscribe(),
-      });
+      const drawCardSubscription: Subscription = this.matchService
+        .DrawCard(params)
+        .subscribe({
+          next: (newCard: Card) => {
+            console.log(newCard);
+            this.myHand.push(newCard);
+            this.myHandCardCoordinates = [];
+            this.MyCardCalc();
+          },
+          error: (err) => console.log(err.error),
+          complete: () => drawCardSubscription.unsubscribe(),
+        });
+    }
   }
 
   DiscardCard(cardIndex: number) {
-    const body: DiscardObj = {
-      playerId: parseInt(localStorage.getItem('id')!),
-      cardIndex: cardIndex,
-      token: localStorage.getItem('token')!,
-    };
+    if (this.playingPlayerIndex == 0) {
+      const body: DiscardObj = {
+        playerId: parseInt(localStorage.getItem('id')!),
+        cardIndex: cardIndex,
+        token: localStorage.getItem('token')!,
+      };
 
-    const params: HttpParams = new HttpParams()
-      .set('playerId', localStorage.getItem('id')!)
-      .set('token', localStorage.getItem('token')!);
+      const params: HttpParams = new HttpParams()
+        .set('playerId', localStorage.getItem('id')!)
+        .set('token', localStorage.getItem('token')!);
 
-    const discardCardSubscription: Subscription = this.matchService
-      .DiscardCard(body)
-      .subscribe({
-        next: (res) => {
-          this.myHand.splice(cardIndex, 1);
-          this.myHandCardCoordinates.splice(cardIndex, 1);
-          const TakeLastCardSubscription: Subscription = this.matchService
-            .TakeLastCard(params)
-            .subscribe({
-              next: (lastCard) => {
-                this.lastCard = lastCard;
-                this.lastCardCoordinates = [];
-                this.LastCardCalc();
-                console.log('new card !!!' + this.lastCard);
-              },
-              error: (err) => console.log(err),
-              complete: () => TakeLastCardSubscription.unsubscribe(),
-            });
-        },
-        error: (err) => console.log(err.error),
-        complete: () => discardCardSubscription.unsubscribe(),
-      });
+      const discardCardSubscription: Subscription = this.matchService
+        .DiscardCard(body)
+        .subscribe({
+          next: (res) => {
+            this.myHand.splice(cardIndex, 1);
+            this.myHandCardCoordinates.splice(cardIndex, 1);
+            const TakeLastCardSubscription: Subscription = this.matchService
+              .TakeLastCard(params)
+              .subscribe({
+                next: (lastCard) => {
+                  this.lastCard = lastCard;
+                  this.lastCardCoordinates = [];
+                  this.LastCardCalc();
+                  console.log('new card !!!' + this.lastCard);
+                },
+                error: (err) => console.log(err),
+                complete: () => TakeLastCardSubscription.unsubscribe(),
+              });
+          },
+          error: (err) => console.log(err.error),
+          complete: () => discardCardSubscription.unsubscribe(),
+        });
+    }
+  }
+
+  Next() {
+    if (this.playingPlayerIndex == 0) {
+      const params: HttpParams = new HttpParams()
+        .set('playerId', localStorage.getItem('id')!)
+        .set('token', localStorage.getItem('token')!);
+
+      const nextSubscription: Subscription = this.matchService
+        .Next(params)
+        .subscribe({
+          next: (playerNewCard: Array<Card>) => {
+            (this.myHand = playerNewCard), (this.myHandCardCoordinates = []);
+            this.MyCardCalc();
+
+            const opponentHandLengthSubscription: Subscription =
+              this.matchService.OpponentAIMoves(params).subscribe({
+                next: (opponentMoves) => console.log(opponentMoves),
+                error: (err) => console.log(err.error),
+                complete: () => opponentHandLengthSubscription.unsubscribe(),
+              });
+          },
+          error: (err) => console.log(err.error),
+          complete: () => nextSubscription.unsubscribe(),
+        });
+    }
+  }
+
+  ShowAllOpponentsMoves(opponentsMoves: Array<OpponentMove>) {
+    for (let i = 0; i < opponentsMoves.length; i++) {}
   }
 }
