@@ -25,7 +25,6 @@
     </div>
   </div>
   <div class="my-hand-wrapper">
-    <button class="next">next</button>
     <div class="hand">
       <app-card
         *ngFor="let card of myHandCardCoordinates; index as i"
@@ -35,5 +34,6 @@
       >
       </app-card>
     </div>
+    <button class="next" (click)="Next()">next</button>
   </div>
 </div>

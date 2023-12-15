@@ -4,7 +4,6 @@ using PlayerModel;
 using CardModel;
 using MatchChangesModel;
 using Newtonsoft.Json;
-using MatchModel;
 using System.Text.Json;
 
 namespace GameManagerService{
@@ -131,7 +130,7 @@ namespace GameManagerService{
             return BadRequest();
         }
 
-        [HttpPost]
+        [HttpGet]
         [Route("/api/[controller]/next")]
         public async Task<IActionResult> Next([FromQuery] int playerId, [FromQuery] string token){
             string userId = await VerifyTokenCall(token);
@@ -151,16 +150,16 @@ namespace GameManagerService{
 
         [HttpGet]
         [Route("/api/[controller]/getOpponentAIGameMoves")]
-        public async Task<IActionResult> GetOpponentAIGameMoves([FromQuery] int matchId, [FromQuery] string token){
+        public async Task<IActionResult> GetOpponentAIGameMoves([FromQuery] int playerId, [FromQuery] string token){
             string userId = await VerifyTokenCall(token);
 
-            if(userId == "" || int.Parse(userId) != matchId)
+            if(userId == "" || int.Parse(userId) != playerId)
             {
                 return Unauthorized("You're not verified");
             }
 
             try{
-                List<MatchChanges> result = _gameManager.OpponentAIGameMoves(matchId);
+                List<MatchChanges> result = _gameManager.OpponentAIGameMoves(playerId);
                 return Ok(JsonConvert.SerializeObject(result));
             }
             catch(Exception e){

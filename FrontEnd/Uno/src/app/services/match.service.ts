@@ -2,11 +2,12 @@ import { Injectable } from '@angular/core';
 import { ApiService } from './api.service';
 import { environment } from '../../environments/environment';
 import { Subject, Subscription } from 'rxjs';
-import { HttpErrorResponse, HttpParams } from '@angular/common/http';
+import { HttpParams } from '@angular/common/http';
 import { Card } from '../Interfaces/Card.types';
 import { StartGame } from '../Interfaces/StartGame.types';
 import { Params } from '@angular/router';
 import { DiscardObj } from '../Interfaces/DiscardObj.types';
+import { OpponentMove } from '../Interfaces/OpponentMove.types';
 
 @Injectable({
   providedIn: 'root',
@@ -117,5 +118,45 @@ export class MatchService {
       });
 
     return discardResponse;
+  }
+
+  Next(params: HttpParams) {
+    let playerNewCardsSubject: Subject<Array<Card>> = new Subject<
+      Array<Card>
+    >();
+
+    const nextSubscription: Subscription = this.api
+      .Get<Array<Card>>(`${environment.apiGameEndpoint}/api/GameManager/next`, {
+        params,
+      })
+      .subscribe({
+        next: (playerNewCards) => {
+          playerNewCardsSubject.next(playerNewCards);
+          console.log(playerNewCards);
+        },
+        error: (err) => console.log(err.error),
+        complete: () => nextSubscription.unsubscribe(),
+      });
+
+    return playerNewCardsSubject;
+  }
+
+  OpponentAIMoves(params: HttpParams) {
+    let opponentHandLengthSubject: Subject<Array<OpponentMove>> = new Subject<
+      Array<OpponentMove>
+    >();
+
+    const opponentHandLengthSubscription: Subscription = this.api
+      .Get<Array<OpponentMove>>(
+        `${environment.apiGameEndpoint}/api/GameManager/getOpponentAIGameMoves`,
+        { params }
+      )
+      .subscribe({
+        next: (opponentMoves) => opponentHandLengthSubject.next(opponentMoves),
+        error: (err) => console.log(err.error),
+        complete: () => opponentHandLengthSubscription.unsubscribe(),
+      });
+
+    return opponentHandLengthSubject;
   }
 }

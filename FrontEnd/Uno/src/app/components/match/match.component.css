@@ -45,15 +45,14 @@
   border: 3px solid green;
   display: flex;
   justify-content: center;
-  align-items: center;
+  align-items: flex-start;
   transform: translateX();
 }
 
 .next {
-  position: absolute;
-  top: 0;
-  right: 0;
-  margin-right: 5rem;
+  position: relative;
+  top: 1rem;
+  left: 0;
 }
 
 .hand {
