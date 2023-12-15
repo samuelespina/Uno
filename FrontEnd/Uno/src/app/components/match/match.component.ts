@@ -48,9 +48,7 @@ export class MatchComponent implements OnInit {
               this.matchService.TakeOpponentHandLength(params).subscribe({
                 next: (opponentHandsLength) => {
                   this.opponentHandsLength = opponentHandsLength;
-                  console.log(
-                    'OPPONENT HAND LENGTH ' + this.opponentHandsLength
-                  );
+                  console.log(this.opponentHandsLength);
                   const TakeLastCardSubscription: Subscription =
                     this.matchService.TakeLastCard(params).subscribe({
                       next: (lastCard) => {

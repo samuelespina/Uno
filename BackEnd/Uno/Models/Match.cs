@@ -54,7 +54,7 @@ namespace MatchModel{
         /*----------------- CONFIGURATIONS -----------------*/
         
         public List<Card> SetPlayers(Player player, int botNumber){
-            // Players.Add(player);
+            Players.Add(player);
             for(int i = 0; i < botNumber; i++){
                 Players.Add(new OpponentAI());
             }
@@ -241,7 +241,9 @@ namespace MatchModel{
 
         public List<int> TakeOpponentHandLength(){
             List<int> allHandsLentgh = new List<int>();
-            Players.ForEach((player)=> allHandsLentgh.Add(player.ReturnHandLength()));
+            for(int i = 1; i < Players.Count; i++){
+                allHandsLentgh.Add(Players[i].ReturnHandLength());
+            }
             return allHandsLentgh;
         }
 
