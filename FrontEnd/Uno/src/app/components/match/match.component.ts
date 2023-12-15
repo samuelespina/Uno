@@ -58,8 +58,7 @@ export class MatchComponent implements OnInit {
                         console.log('LAST CARD ' + this.lastCard);
                       },
                       error: (err) => console.log(err),
-                      complete: () =>
-                        opponentHandLengthSubscription.unsubscribe(),
+                      complete: () => TakeLastCardSubscription.unsubscribe(),
                     });
                 },
                 error: (err) => console.log(err),
@@ -92,8 +91,7 @@ export class MatchComponent implements OnInit {
                         console.log(this.lastCard);
                       },
                       error: (err) => console.log(err),
-                      complete: () =>
-                        opponentHandLengthSubscription.unsubscribe(),
+                      complete: () => TakeLastCardSubscription.unsubscribe(),
                     });
                 },
                 error: (err) => console.log(err),
@@ -214,12 +212,28 @@ export class MatchComponent implements OnInit {
       token: localStorage.getItem('token')!,
     };
 
+    const params: HttpParams = new HttpParams()
+      .set('playerId', localStorage.getItem('id')!)
+      .set('token', localStorage.getItem('token')!);
+
     const discardCardSubscription: Subscription = this.matchService
       .DiscardCard(body)
       .subscribe({
         next: (res) => {
           this.myHand.splice(cardIndex, 1);
           this.myHandCardCoordinates.splice(cardIndex, 1);
+          const TakeLastCardSubscription: Subscription = this.matchService
+            .TakeLastCard(params)
+            .subscribe({
+              next: (lastCard) => {
+                this.lastCard = lastCard;
+                this.lastCardCoordinates = [];
+                this.LastCardCalc();
+                console.log('new card !!!' + this.lastCard);
+              },
+              error: (err) => console.log(err),
+              complete: () => TakeLastCardSubscription.unsubscribe(),
+            });
         },
         error: (err) => console.log(err.error),
         complete: () => discardCardSubscription.unsubscribe(),

@@ -17,13 +17,12 @@ namespace GameManagerService{
             _client = new();
             _gameManager = gameManager;
         }
-        // public readonly string _baseEndPoint = "/api/[controller]/";
 
         private async Task<string> VerifyTokenCall(string token)
         {
             using (HttpClient client = new HttpClient())
             {
-                string apiUrl = $"{_authAPI}/api/UserService/verifyToken?token={token}";//la porta deve essere quella di auth
+                string apiUrl = $"{_authAPI}/api/UserService/verifyToken?token={token}";
 
                 try
                 {
@@ -55,7 +54,7 @@ namespace GameManagerService{
             {
 
                 int botNumber = botNumberElement.GetInt16();
-                int playerId = playerIdElement.GetInt32();
+                int playerId = playerIdElement.GetInt16();
                 string name = nameElement.GetString()!;
                 string surname = surnameElement.GetString()!;
                 string token = tokenElement.GetString()!;
@@ -104,7 +103,17 @@ namespace GameManagerService{
 
         [HttpPost]
         [Route("/api/[controller]/discardCard")]
-        public async Task<IActionResult> DiscardCard([FromQuery ]int playerId,[FromQuery] int cardIndex, [FromQuery] string token){
+        public async Task<IActionResult> DiscardCard([FromBody] JsonElement request){
+
+            if (request.TryGetProperty("playerId", out var playerIdElement)
+                && request.TryGetProperty("cardIndex", out var cardIndexElement)
+                && request.TryGetProperty("token", out var tokenElement))
+            {
+
+                int playerId = playerIdElement.GetInt16();
+                byte cardIndex = cardIndexElement.GetByte()!;
+                string token = tokenElement.GetString()!;
+
             string userId = await VerifyTokenCall(token);
 
             if(userId == "" || int.Parse(userId) != playerId)
@@ -118,6 +127,8 @@ namespace GameManagerService{
             }catch(Exception e){
                 return BadRequest(e.Message);
             }
+            }
+            return BadRequest();
         }
 
         [HttpPost]
