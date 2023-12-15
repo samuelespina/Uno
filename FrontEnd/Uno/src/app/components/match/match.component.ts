@@ -19,6 +19,7 @@ export class MatchComponent implements OnInit {
   myHandCardCoordinates: Array<Array<number>> = [];
   opponentHandsLength!: Array<number>;
   lastCard!: Card;
+  lastCardCoordinates: Array<Array<number>> = [];
 
   constructor(private matchService: MatchService) {}
 
@@ -41,7 +42,7 @@ export class MatchComponent implements OnInit {
         .subscribe({
           next: async (myHand) => {
             this.myHand = myHand;
-            this.CardCalc();
+            this.MyCardCalc();
             console.log('START MATCH ' + this.myHand);
             const opponentHandLengthSubscription: Subscription =
               this.matchService.TakeOpponentHandLength(params).subscribe({
@@ -54,6 +55,7 @@ export class MatchComponent implements OnInit {
                     this.matchService.TakeLastCard(params).subscribe({
                       next: (lastCard) => {
                         this.lastCard = lastCard;
+                        this.LastCardCalc();
                         console.log('LAST CARD ' + this.lastCard);
                       },
                       error: (err) => console.log(err),
@@ -74,7 +76,7 @@ export class MatchComponent implements OnInit {
         .subscribe({
           next: (myHand) => {
             this.myHand = myHand;
-            this.CardCalc();
+            this.MyCardCalc();
             console.log(this.myHand);
             const opponentHandLengthSubscription: Subscription =
               this.matchService.TakeOpponentHandLength(params).subscribe({
@@ -87,7 +89,8 @@ export class MatchComponent implements OnInit {
                     this.matchService.TakeLastCard(params).subscribe({
                       next: (lastCard) => {
                         this.lastCard = lastCard;
-                        console.log('LAST CARD ' + this.lastCard);
+                        this.LastCardCalc();
+                        console.log(this.lastCard);
                       },
                       error: (err) => console.log(err),
                       complete: () =>
@@ -113,16 +116,16 @@ export class MatchComponent implements OnInit {
     return k / x;
   }
 
-  CardCalc() {
+  MyCardCalc() {
     for (let i = 0; i < this.myHand.length; i++) {
       let cardCoordinates: Array<number> = [];
       if (this.myHand[i].Value >= 0 && this.myHand[i].Value <= 11) {
         let number = 140 * this.myHand[i].Value + 19;
         cardCoordinates.push(number);
-      }
-      if (this.myHand[i].Color != 4) {
-        let color = 210 * this.myHand[i].Color + 15;
-        cardCoordinates.push(color);
+        if (this.myHand[i].Color != 4) {
+          let color = 210 * this.myHand[i].Color + 15;
+          cardCoordinates.push(color);
+        }
       }
 
       if (this.myHand[i].Value == 12) {
@@ -140,7 +143,7 @@ export class MatchComponent implements OnInit {
       }
 
       if (this.myHand[i].Value == 14) {
-        let color = 859;
+        let color = 579;
         let number = 855;
         cardCoordinates.push(color);
         cardCoordinates.push(number);
@@ -148,5 +151,40 @@ export class MatchComponent implements OnInit {
 
       this.myHandCardCoordinates.push(cardCoordinates);
     }
+  }
+
+  LastCardCalc() {
+    let cardCoordinates: Array<number> = [];
+    if (this.lastCard.Value >= 0 && this.lastCard.Value <= 11) {
+      let number = 140 * this.lastCard.Value + 19;
+      cardCoordinates.push(number);
+      if (this.lastCard.Color != 4) {
+        let color = 210 * this.lastCard.Color + 15;
+        cardCoordinates.push(color);
+      }
+    }
+
+    if (this.lastCard.Value == 12) {
+      let color = 140 * this.lastCard.Color + 19;
+      let number = 855;
+      cardCoordinates.push(color);
+      cardCoordinates.push(number);
+    }
+
+    if (this.lastCard.Value == 13) {
+      let color = 579;
+      let number = 855;
+      cardCoordinates.push(color);
+      cardCoordinates.push(number);
+    }
+
+    if (this.lastCard.Value == 14) {
+      let color = 579;
+      let number = 855;
+      cardCoordinates.push(color);
+      cardCoordinates.push(number);
+    }
+
+    this.lastCardCoordinates.push(cardCoordinates);
   }
 }
