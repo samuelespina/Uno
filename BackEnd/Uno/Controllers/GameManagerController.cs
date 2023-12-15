@@ -83,7 +83,7 @@ namespace GameManagerService{
         }
 
         [HttpGet]
-        [Route("/api[controller]/drawCard")]
+        [Route("/api/[controller]/drawCard")]
         public async Task<IActionResult> DrawCard([FromQuery] int playerId, [FromQuery] string token){
 
             string userId = await VerifyTokenCall(token);
@@ -95,7 +95,7 @@ namespace GameManagerService{
 
             try{
                 Card newCard = _gameManager.DrawCard(playerId);
-                return Content(newCard.ToString());
+                return Content(JsonConvert.SerializeObject(newCard));
             }
             catch(Exception e){
                 return BadRequest(e.Message);

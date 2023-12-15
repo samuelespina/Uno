@@ -12,7 +12,11 @@
   </div>
   <div class="table-wrapper">
     <div class="table">
-      <app-card [isHandCard]="false" [enemyOrNot]="true"></app-card>
+      <app-card
+        [isHandCard]="false"
+        [enemyOrNot]="true"
+        (click)="DrawCard()"
+      ></app-card>
       <app-card
         [isHandCard]="false"
         [value]="lastCardCoordinates[0][0]"
@@ -27,7 +31,8 @@
         *ngFor="let card of myHandCardCoordinates; index as i"
         [value]="myHandCardCoordinates[i][0]"
         [color]="myHandCardCoordinates[i][1]"
-        >{{ myHandCardCoordinates[i][0] }} {{ myHandCardCoordinates[i][1] }}
+        (click)="DiscardCard(i)"
+      >
       </app-card>
     </div>
   </div>

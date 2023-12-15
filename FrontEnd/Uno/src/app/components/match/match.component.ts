@@ -6,6 +6,7 @@ import { Card } from '../../Interfaces/Card.types';
 import { StartGame } from '../../Interfaces/StartGame.types';
 import { CommonModule } from '@angular/common';
 import { CardComponent } from '../card/card.component';
+import { DiscardObj } from '../../Interfaces/DiscardObj.types';
 
 @Component({
   selector: 'app-match',
@@ -184,5 +185,44 @@ export class MatchComponent implements OnInit {
     }
 
     this.lastCardCoordinates.push(cardCoordinates);
+  }
+
+  DrawCard() {
+    const params: HttpParams = new HttpParams()
+      .set('playerId', localStorage.getItem('id')!)
+      .set('token', localStorage.getItem('token')!);
+
+    const drawCardSubscription: Subscription = this.matchService
+      .DrawCard(params)
+      .subscribe({
+        next: (newCard: Card) => {
+          console.log(newCard);
+          this.lastCard = newCard;
+          this.myHand.push(newCard);
+          this.myHandCardCoordinates = [];
+          this.MyCardCalc();
+        },
+        error: (err) => console.log(err.error),
+        complete: () => drawCardSubscription.unsubscribe(),
+      });
+  }
+
+  DiscardCard(cardIndex: number) {
+    const body: DiscardObj = {
+      playerId: parseInt(localStorage.getItem('id')!),
+      cardIndex: cardIndex,
+      token: localStorage.getItem('token')!,
+    };
+
+    const discardCardSubscription: Subscription = this.matchService
+      .DiscardCard(body)
+      .subscribe({
+        next: (res) => {
+          this.myHand.splice(cardIndex, 1);
+          this.myHandCardCoordinates.splice(cardIndex, 1);
+        },
+        error: (err) => console.log(err.error),
+        complete: () => discardCardSubscription.unsubscribe(),
+      });
   }
 }

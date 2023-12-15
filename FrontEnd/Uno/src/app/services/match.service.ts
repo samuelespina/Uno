@@ -5,6 +5,8 @@ import { Subject, Subscription } from 'rxjs';
 import { HttpErrorResponse, HttpParams } from '@angular/common/http';
 import { Card } from '../Interfaces/Card.types';
 import { StartGame } from '../Interfaces/StartGame.types';
+import { Params } from '@angular/router';
+import { DiscardObj } from '../Interfaces/DiscardObj.types';
 
 @Injectable({
   providedIn: 'root',
@@ -85,5 +87,35 @@ export class MatchService {
       });
 
     return TakeLastCardSubject;
+  }
+
+  DrawCard(params: Params) {
+    let newCardSubject: Subject<Card> = new Subject<Card>();
+
+    const drawCardSubscription: Subscription = this.api
+      .Get<Card>(`${environment.apiGameEndpoint}/api/GameManager/drawCard`, {
+        params,
+      })
+      .subscribe({
+        next: (newCard) => newCardSubject.next(newCard),
+        error: (err) => console.log(err.error),
+        complete: () => drawCardSubscription.unsubscribe(),
+      });
+
+    return newCardSubject;
+  }
+
+  DiscardCard(body: DiscardObj) {
+    let discardResponse: Subject<boolean> = new Subject<boolean>();
+
+    const discardCardSubscription: Subscription = this.api
+      .Post(`${environment.apiGameEndpoint}/api/GameManager/discardCard`, body)
+      .subscribe({
+        next: (res) => discardResponse.next(true),
+        error: (err) => console.log(err.error),
+        complete: () => discardCardSubscription.unsubscribe(),
+      });
+
+    return discardResponse;
   }
 }
