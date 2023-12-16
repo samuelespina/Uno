@@ -1,12 +1,16 @@
 .match-page-container {
-  height: 100%;
-  width: 100%;
-  border: 3px solid red;
+  height: 100vh;
+  width: 100vw;
+  background: rgb(252, 70, 70);
+  background: radial-gradient(
+    circle,
+    rgba(252, 70, 70, 1) 0%,
+    rgba(249, 209, 66, 1) 100%
+  );
 }
 
 .opponents-hands-wrapper,
-.my-hand-wrapper,
-.table-wrapper {
+.my-hand-wrapper {
   width: 100vw;
   height: 18rem;
 }
@@ -15,27 +19,32 @@
   position: absolute;
   top: 0;
   left: 0;
-  border: 3px solid blue;
   display: flex;
   justify-content: space-evenly;
   align-items: center;
 }
 
 .table-wrapper {
-  border: 3px solid yellow;
   position: absolute;
   top: 50%;
   transform: translateY(-50%);
   display: flex;
   justify-content: center;
-  align-items: center;
+  align-items: flex-start;
+  width: 100vw;
 }
 
 .table {
-  border: 3px solid red;
   display: flex;
   justify-content: center;
   align-items: center;
+}
+
+.wild-color {
+  width: 3rem;
+  height: 3rem;
+  border-radius: 50%;
+  transition: all 0.2s ease-in-out;
 }
 
 .chose-color-popup {
@@ -90,7 +99,6 @@
   position: absolute;
   bottom: 0;
   left: 0;
-  border: 3px solid green;
   display: flex;
   justify-content: center;
   align-items: flex-start;
@@ -108,5 +116,4 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  border: 3px solid red;
 }

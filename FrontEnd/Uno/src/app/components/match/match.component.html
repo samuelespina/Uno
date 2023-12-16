@@ -24,6 +24,7 @@
         [color]="lastCardCoordinates[0][1]"
       ></app-card>
     </div>
+    <div class="wild-color" [ngStyle]="{ 'background-color': wildColor }"></div>
   </div>
   <div class="chose-color-popup" *ngIf="changeColorDiscard">
     <div class="chose-a-color">

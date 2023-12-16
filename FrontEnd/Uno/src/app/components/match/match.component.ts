@@ -25,6 +25,7 @@ export class MatchComponent implements OnInit {
   lastCardCoordinates: Array<Array<number>> = [];
   playingPlayerIndex: number = 0;
   changeColorDiscard: boolean = false;
+  wildColor!: string;
 
   constructor(private matchService: MatchService) {}
 
@@ -279,6 +280,8 @@ export class MatchComponent implements OnInit {
 
   async ShowAllOpponentsMoves(opponentsMoves: Array<OpponentMove>) {
     for (let i = 0; i < opponentsMoves.length; i++) {
+      this.wildColor = opponentsMoves[i].WildColor;
+
       this.opponentHandsLength[opponentsMoves[i].PlayerId - 1] =
         opponentsMoves[i].HandLength;
       this.lastCard = opponentsMoves[i].LastCard;
@@ -300,6 +303,15 @@ export class MatchComponent implements OnInit {
       token: localStorage.getItem('token')!,
     };
 
-    this.matchService.ChangeColor(body);
+    const changeColorSubscription: Subscription = this.matchService
+      .ChangeColor(body)
+      .subscribe({
+        next: (newColor) => (
+          (this.wildColor = newColor), console.log(this.wildColor)
+        ),
+        error: (err) => console.log(err.error),
+        complete: () => changeColorSubscription.unsubscribe(),
+      });
+    this.changeColorDiscard = false;
   }
 }

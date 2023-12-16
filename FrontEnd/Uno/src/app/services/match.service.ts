@@ -162,15 +162,19 @@ export class MatchService {
   }
 
   ChangeColor(body: ChangeColorObj) {
+    let newColorSubject: Subject<string> = new Subject<string>();
+
     const changeColorSubscription: Subscription = this.api
       .Post<string>(
         `${environment.apiGameEndpoint}/api/GameManager/changeColor`,
         body
       )
       .subscribe({
-        next: (res) => console.log(res),
+        next: (newColor) => newColorSubject.next(newColor.toLowerCase()),
         error: (err) => console.log(err.error),
         complete: () => changeColorSubscription.unsubscribe(),
       });
+
+    return newColorSubject;
   }
 }

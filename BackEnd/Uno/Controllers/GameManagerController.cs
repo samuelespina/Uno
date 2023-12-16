@@ -167,7 +167,7 @@ namespace GameManagerService{
             }
         }
 
-        [HttpGet]
+        [HttpPost]
         [Route("api/[controller]/changeColor")]
         public async Task<IActionResult> ChangeColor([FromBody] JsonElement request){
             if (request.TryGetProperty("newColor", out var newColorElement)
@@ -187,7 +187,7 @@ namespace GameManagerService{
                 }
                 try{
                     string resultColor =_gameManager.ChangeColor(newColor, playerId);
-                    return Ok(resultColor);
+                    return Ok(JsonConvert.SerializeObject(resultColor));
                 }catch(Exception e){
                     BadRequest(e.Message);
                 }
