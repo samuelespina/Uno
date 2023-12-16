@@ -9,13 +9,15 @@ import { CardComponent } from '../card/card.component';
 import { DiscardObj } from '../../Interfaces/DiscardObj.types';
 import { OpponentMove } from '../../Interfaces/OpponentMove.types';
 import { ChangeColorObj } from '../../Interfaces/ChangeColorObj.types';
+import { Router } from '@angular/router';
+import { ScoreboardComponent } from '../scoreboard/scoreboard.component';
 
 @Component({
   selector: 'app-match',
   standalone: true,
   templateUrl: './match.component.html',
   styleUrl: './match.component.css',
-  imports: [CommonModule, CardComponent],
+  imports: [CommonModule, CardComponent, ScoreboardComponent],
 })
 export class MatchComponent implements OnInit {
   myHand!: Array<Card>;
@@ -26,9 +28,10 @@ export class MatchComponent implements OnInit {
   playingPlayerIndex: number = 0;
   changeColorDiscard: boolean = false;
   wildColor!: string;
-  test: boolean = true;
+  isMyTurn: boolean = true;
+  isFinished: boolean = true;
 
-  constructor(private matchService: MatchService) {}
+  constructor(private matchService: MatchService, private router: Router) {}
 
   ngOnInit(): void {
     const params: HttpParams = new HttpParams()
@@ -234,12 +237,17 @@ export class MatchComponent implements OnInit {
             const TakeLastCardSubscription: Subscription = this.matchService
               .TakeLastCard(params)
               .subscribe({
-                next: (lastCard) => {
+                next: async (lastCard) => {
                   this.lastCard = lastCard;
                   this.lastCardCoordinates = [];
                   this.LastCardCalc();
                   if (lastCard.Color == 4) {
                     this.changeColorDiscard = true;
+                  }
+
+                  if (this.myHand.length == 0) {
+                    await this.delay(1000);
+                    this.isFinished = true;
                   }
                 },
                 error: (err) => console.log(err),
@@ -283,13 +291,9 @@ export class MatchComponent implements OnInit {
   }
 
   async ShowAllOpponentsMoves(opponentsMoves: Array<OpponentMove>) {
-    this.test = false;
+    this.isMyTurn = false;
     for (let i = 0; i < opponentsMoves.length; i++) {
       this.wildColor = opponentsMoves[i].WildColor;
-
-      opponentsMoves[i].WildColor == 'yellow'
-        ? (this.wildColor = 'orange')
-        : (this.wildColor = opponentsMoves[i].WildColor);
 
       let playerId = opponentsMoves[i].PlayerId - 1;
       this.playingPlayerIndex = playerId;
@@ -301,7 +305,12 @@ export class MatchComponent implements OnInit {
       await this.delay(1000);
     }
     this.playingPlayerIndex = 0;
-    this.test = true;
+    this.isMyTurn = true;
+
+    if (opponentsMoves[opponentsMoves.length - 1].HandLength == 0) {
+      await this.delay(1000);
+      this.isFinished = true;
+    }
   }
 
   delay(ms: number): Promise<void> {
@@ -318,10 +327,7 @@ export class MatchComponent implements OnInit {
     const changeColorSubscription: Subscription = this.matchService
       .ChangeColor(body)
       .subscribe({
-        next: (newColor) =>
-          newColor == 'yellow'
-            ? (this.wildColor = 'orange')
-            : (this.wildColor = newColor),
+        next: (newColor) => (this.wildColor = newColor),
         error: (err) => console.log(err.error),
         complete: () => changeColorSubscription.unsubscribe(),
       });

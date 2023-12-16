@@ -46,7 +46,7 @@ button {
   height: 2rem;
   border-radius: 1rem;
   border: none;
-  background-color: rgb(43, 226, 131, 0.7);
+  background-color: rgba(255, 0, 0, 0.8);
   font-weight: bold;
   transition: all 0.2s ease-in-out;
 }
@@ -54,6 +54,8 @@ button {
 button:hover {
   cursor: pointer;
   transform: translateY(-0.2rem);
+  color: white;
+  background-color: black;
 }
 
 #backHome {

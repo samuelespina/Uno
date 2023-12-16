@@ -50,24 +50,6 @@ namespace PlayerModel{
                     }
                 }
             }else if(PlayerMoves.Count > 0){
-                /*
-                
-                cosa posso buttare più carte?
-
-                    magari non ho carte e quindi devo pescare, quindi devo poter fare:
-                        draw, discard
-                    devo poter anche buttare una sequenza dopo aver pescato :
-                        draw, discard, discard
-
-                
-                devo poter buttare più carte che matchano con in numero a terra (se il numero è massimo 9) se la move precedente è discard
-                
-                se invece la move precedente è draw allora devo poter buttare una carta qualunque che matcha con quella a terra
-                    
-                
-                */
-                //devo poter buttare una carta che voglio che l'unica move che ho fatto è draw
-
                 if(PlayerMoves[PlayerMoves.Count -1] == "discard" && LastCard.Score < 10 && _hand[cardIndex].Value == LastCard.Value){
                     PlayerMoves.Add("discard");
                     Card cardToDiscard = _hand[cardIndex];

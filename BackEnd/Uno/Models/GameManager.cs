@@ -47,7 +47,11 @@ namespace GameManagerModel{
 
         public void DiscardCard(int playerId, int cardIndex){
             Match myMatch = FindMyMatch(playerId);
-            myMatch.DiscardCard(cardIndex);
+            int playerHandLength = myMatch.DiscardCard(cardIndex);
+
+            if(playerHandLength == 0){
+                TransferToFinishedMatches(myMatch);
+            }
         }
 
         public List<MatchChanges> OpponentAIGameMoves(int matchId){
@@ -63,10 +67,6 @@ namespace GameManagerModel{
         public List<Card> Next(int matchId){
             Match myMatch = FindMyMatch(matchId);
             List<Card> playerNewCards = myMatch.Next();
-            if(playerNewCards.Count == 0){
-                TransferToFinishedMatches(myMatch);
-            }
-
             return playerNewCards;
         }
 

@@ -13,6 +13,7 @@
       ></app-card>
     </div>
   </div>
+
   <div class="table-wrapper">
     <div class="table">
       <app-card
@@ -31,6 +32,7 @@
     </div>
     <div class="wild-color" [ngStyle]="{ 'background-color': wildColor }"></div>
   </div>
+
   <div class="chose-color-popup" *ngIf="changeColorDiscard">
     <div class="chose-a-color">
       <p>chose a color</p>
@@ -74,7 +76,10 @@
       </div>
     </div>
   </div>
-  <div class="my-hand-wrapper" [class.my-turn]="test">
+
+  <app-scoreboard *ngIf="isFinished"></app-scoreboard>
+
+  <div class="my-hand-wrapper" [class.my-turn]="isMyTurn">
     <div class="hand">
       <app-card
         *ngFor="let card of myHandCardCoordinates; index as i"

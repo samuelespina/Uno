@@ -93,9 +93,14 @@ namespace MatchModel{
             return newCard;
         }
 
-        public void DiscardCard(int cardIndex){
+        public int DiscardCard(int cardIndex){
             Card discardCard = Players[PlayingPlayerIndex].EvaluateChosenCard(cardIndex, DiscardPile[DiscardPile.Count -1], RoundStatus, WildColor);
             DiscardPile.Add(discardCard);
+            if(Players[PlayingPlayerIndex].ReturnHandLength() == 0){
+                //creare la scoreboard
+                CreateScoreBoard();
+            }
+            return Players[PlayingPlayerIndex].ReturnHandLength();
         }
 
         public string ChangeColor(int newColor){
@@ -117,28 +122,22 @@ namespace MatchModel{
                 return playerCardsAfterDraw;
             }
 
-
+            if(Players[PlayingPlayerIndex].PlayerMoves.Count == 0){
+                throw new Exception("you can't skip if you've not done at least 1 move");
+            }
             
-            if((Players[PlayingPlayerIndex].PlayerMoves.Count == 0 || Players[PlayingPlayerIndex].PlayerMoves[0] == "draw") 
+            if(Players[PlayingPlayerIndex].PlayerMoves[0] == "draw"
             && (DiscardPile[DiscardPile.Count -1].Value == CardValue.DrawFour || DiscardPile[DiscardPile.Count -1].Value == CardValue.DrawTwo || DiscardPile[DiscardPile.Count -1].Value == CardValue.Skip || DiscardPile[DiscardPile.Count -1].Value == CardValue.Reverse)){
                 Players[PlayingPlayerIndex].ResetPlayerMoves();
                 List<Card> playerCards = Players[PlayingPlayerIndex].ReturnHandStatus();
                 RoundCicleManagement();
                 return playerCards;
             }
-            
-            if(Players[PlayingPlayerIndex].PlayerMoves.Count == 0){
-                throw new Exception("you can't skip if you've not done at least 1 move");
-            }
 
             Players[PlayingPlayerIndex].ResetPlayerMoves();
 
             RoundStateManagement();
             List<Card> playerNewCards = Players[PlayingPlayerIndex].ReturnHandStatus();
-            if(playerNewCards.Count == 0){
-                //creare la scoreboard
-                CreateScoreBoard();
-            }
             RoundCicleManagement();
             
             return playerNewCards;
