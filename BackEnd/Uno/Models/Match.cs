@@ -172,8 +172,12 @@ namespace MatchModel{
                 if(DiscardPile[DiscardPile.Count -1].Color != CardColor.Wild){
                     WildColor = "";
                 }
+
+                Players[PlayingPlayerIndex].ResetPlayerMoves();
+
                 AllChanges.Add(new MatchChanges(Players[PlayingPlayerIndex].ReturnHandLength(), DiscardPile[DiscardPile.Count -1]));
                 AllChanges[AllChanges.Count -1].SetWildColor(WildColor);
+                AllChanges[AllChanges.Count -1].SetPlayerId(PlayingPlayerIndex);
 
                 if(Players[PlayingPlayerIndex].WinOrNot()){
                     //calcolo della scoreboard
@@ -181,8 +185,6 @@ namespace MatchModel{
                     break;
                 }
 
-                Players[PlayingPlayerIndex].ResetPlayerMoves();
-                AllChanges[AllChanges.Count -1].SetPlayerId(PlayingPlayerIndex);
                 RoundCicleManagement();
             }
             return AllChanges;

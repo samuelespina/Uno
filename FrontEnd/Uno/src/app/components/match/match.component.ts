@@ -26,6 +26,7 @@ export class MatchComponent implements OnInit {
   playingPlayerIndex: number = 0;
   changeColorDiscard: boolean = false;
   wildColor!: string;
+  test: boolean = true;
 
   constructor(private matchService: MatchService) {}
 
@@ -107,6 +108,7 @@ export class MatchComponent implements OnInit {
           complete: () => resumeSubscription.unsubscribe(),
         });
     }
+    console.log('playerid ' + this.playingPlayerIndex);
   }
 
   Iterate(num: number): number[] {
@@ -212,40 +214,42 @@ export class MatchComponent implements OnInit {
   }
 
   DiscardCard(cardIndex: number) {
-    const body: DiscardObj = {
-      playerId: parseInt(localStorage.getItem('id')!),
-      cardIndex: cardIndex,
-      token: localStorage.getItem('token')!,
-    };
+    if (this.playingPlayerIndex == 0) {
+      const body: DiscardObj = {
+        playerId: parseInt(localStorage.getItem('id')!),
+        cardIndex: cardIndex,
+        token: localStorage.getItem('token')!,
+      };
 
-    const params: HttpParams = new HttpParams()
-      .set('playerId', localStorage.getItem('id')!)
-      .set('token', localStorage.getItem('token')!);
+      const params: HttpParams = new HttpParams()
+        .set('playerId', localStorage.getItem('id')!)
+        .set('token', localStorage.getItem('token')!);
 
-    const discardCardSubscription: Subscription = this.matchService
-      .DiscardCard(body)
-      .subscribe({
-        next: (res) => {
-          this.myHand.splice(cardIndex, 1);
-          this.myHandCardCoordinates.splice(cardIndex, 1);
-          const TakeLastCardSubscription: Subscription = this.matchService
-            .TakeLastCard(params)
-            .subscribe({
-              next: (lastCard) => {
-                this.lastCard = lastCard;
-                this.lastCardCoordinates = [];
-                this.LastCardCalc();
-                if (lastCard.Color == 4) {
-                  this.changeColorDiscard = true;
-                }
-              },
-              error: (err) => console.log(err),
-              complete: () => TakeLastCardSubscription.unsubscribe(),
-            });
-        },
-        error: (err) => console.log(err.error),
-        complete: () => discardCardSubscription.unsubscribe(),
-      });
+      const discardCardSubscription: Subscription = this.matchService
+        .DiscardCard(body)
+        .subscribe({
+          next: (res) => {
+            this.myHand.splice(cardIndex, 1);
+            this.myHandCardCoordinates.splice(cardIndex, 1);
+            const TakeLastCardSubscription: Subscription = this.matchService
+              .TakeLastCard(params)
+              .subscribe({
+                next: (lastCard) => {
+                  this.lastCard = lastCard;
+                  this.lastCardCoordinates = [];
+                  this.LastCardCalc();
+                  if (lastCard.Color == 4) {
+                    this.changeColorDiscard = true;
+                  }
+                },
+                error: (err) => console.log(err),
+                complete: () => TakeLastCardSubscription.unsubscribe(),
+              });
+          },
+          error: (err) => console.log(err.error),
+          complete: () => discardCardSubscription.unsubscribe(),
+        });
+    }
   }
 
   Next() {
@@ -279,17 +283,25 @@ export class MatchComponent implements OnInit {
   }
 
   async ShowAllOpponentsMoves(opponentsMoves: Array<OpponentMove>) {
+    this.test = false;
     for (let i = 0; i < opponentsMoves.length; i++) {
       this.wildColor = opponentsMoves[i].WildColor;
 
-      this.opponentHandsLength[opponentsMoves[i].PlayerId - 1] =
-        opponentsMoves[i].HandLength;
+      opponentsMoves[i].WildColor == 'yellow'
+        ? (this.wildColor = 'orange')
+        : (this.wildColor = opponentsMoves[i].WildColor);
+
+      let playerId = opponentsMoves[i].PlayerId - 1;
+      this.playingPlayerIndex = playerId;
+      this.opponentHandsLength[playerId] = opponentsMoves[i].HandLength;
       this.lastCard = opponentsMoves[i].LastCard;
       this.lastCardCoordinates = [];
       this.LastCardCalc();
 
-      await this.delay(2000);
+      await this.delay(1000);
     }
+    this.playingPlayerIndex = 0;
+    this.test = true;
   }
 
   delay(ms: number): Promise<void> {
@@ -306,9 +318,10 @@ export class MatchComponent implements OnInit {
     const changeColorSubscription: Subscription = this.matchService
       .ChangeColor(body)
       .subscribe({
-        next: (newColor) => (
-          (this.wildColor = newColor), console.log(this.wildColor)
-        ),
+        next: (newColor) =>
+          newColor == 'yellow'
+            ? (this.wildColor = 'orange')
+            : (this.wildColor = newColor),
         error: (err) => console.log(err.error),
         complete: () => changeColorSubscription.unsubscribe(),
       });

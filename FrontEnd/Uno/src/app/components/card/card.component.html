@@ -1,6 +1,7 @@
 <div
   class="card"
   [class.table-card]="!isHandCard"
+  [class.my-card]="myCard"
   [ngClass]="enemyOrNot ? 'enemy-card' : ''"
   [style.background-image]="
     !enemyOrNot

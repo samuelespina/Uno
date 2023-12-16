@@ -1,9 +1,12 @@
-<div class="match-page-container">
+<div
+  class="match-page-container"
+  [style.background-image]="'url(assets/img/GabeBackground.jpg)'"
+>
   <div class="opponents-hands-wrapper">
     <div class="hand" *ngFor="let hand of opponentHandsLength; index as i">
       <app-card
         [ngStyle]="{
-          width: SpaceCalc(opponentHandsLength.length) + 'rem'
+          width: SpaceCalc(opponentHandsLength.length) + 'rem',
         }"
         [enemyOrNot]="true"
         *ngFor="let card of Iterate(hand)"
@@ -13,10 +16,12 @@
   <div class="table-wrapper">
     <div class="table">
       <app-card
+        class="test"
         [isHandCard]="false"
         [enemyOrNot]="true"
         (click)="DrawCard()"
         [ngStyle]="{ rotate: '180deg' }"
+        [ngStyle]="{ cursor: 'pointer' }"
       ></app-card>
       <app-card
         [isHandCard]="false"
@@ -33,40 +38,53 @@
         <div class="row">
           <div
             class="color"
-            [ngStyle]="{ 'background-color': 'red' }"
+            [ngStyle]="{
+              'background-color': 'red',
+              'border-radius': '1rem 0 0 0'
+            }"
             (click)="ChangeColor(0)"
           ></div>
           <div
             class="color"
-            [ngStyle]="{ 'background-color': 'orange' }"
+            [ngStyle]="{
+              'background-color': 'orange',
+              'border-radius': '0 1rem 0 0'
+            }"
             (click)="ChangeColor(1)"
           ></div>
         </div>
         <div class="row">
           <div
             class="color"
-            [ngStyle]="{ 'background-color': 'green' }"
+            [ngStyle]="{
+              'background-color': 'green',
+              'border-radius': '0 0 0 1rem'
+            }"
             (click)="ChangeColor(2)"
           ></div>
           <div
             class="color"
-            [ngStyle]="{ 'background-color': 'blue' }"
+            [ngStyle]="{
+              'background-color': 'blue',
+              'border-radius': '0 0 1rem 0'
+            }"
             (click)="ChangeColor(3)"
           ></div>
         </div>
       </div>
     </div>
   </div>
-  <div class="my-hand-wrapper">
+  <div class="my-hand-wrapper" [class.my-turn]="test">
     <div class="hand">
       <app-card
         *ngFor="let card of myHandCardCoordinates; index as i"
         [value]="myHandCardCoordinates[i][0]"
         [color]="myHandCardCoordinates[i][1]"
         (click)="DiscardCard(i)"
+        [myCard]="true"
       >
       </app-card>
     </div>
-    <button class="next" (click)="Next()">next</button>
+    <button class="next" (click)="Next()">NEXT</button>
   </div>
 </div>

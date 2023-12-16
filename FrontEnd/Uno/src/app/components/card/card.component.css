@@ -2,16 +2,23 @@
   height: 13.1rem;
   width: 8.8rem;
   border-radius: 1.4rem;
-  background-color: violet;
   margin-left: -4rem;
   overflow: hidden;
   /*-19 -15*/
   /*-140 -210*/
 }
+.my-card {
+  transition: all 0.1s ease-in-out;
+  box-shadow: 0px 0px 40px -20px rgba(255, 255, 255, 0);
+}
+.my-card:hover {
+  cursor: pointer;
+  box-shadow: 0px 0px 40px -0px rgb(255, 255, 255);
+}
 
 .enemy-card {
-  background-size: cover;
-  height: 13.8rem;
+  background-size: auto 100%;
+  background-repeat: no-repeat;
 }
 
 .table-card {

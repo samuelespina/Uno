@@ -13,4 +13,5 @@ export class CardComponent {
   @Input() color!: number;
   @Input() value!: number;
   @Input() isHandCard: boolean = true;
+  @Input() myCard: boolean = false;
 }
