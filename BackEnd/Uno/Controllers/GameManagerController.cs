@@ -113,19 +113,19 @@ namespace GameManagerService{
                 byte cardIndex = cardIndexElement.GetByte()!;
                 string token = tokenElement.GetString()!;
 
-            string userId = await VerifyTokenCall(token);
+                string userId = await VerifyTokenCall(token);
 
-            if(userId == "" || int.Parse(userId) != playerId)
-            {
-                return Unauthorized("You're not verified");
-            }
+                if(userId == "" || int.Parse(userId) != playerId)
+                {
+                    return Unauthorized("You're not verified");
+                }
 
-            try{
-                _gameManager.DiscardCard(playerId, cardIndex);
-                return Ok();
-            }catch(Exception e){
-                return BadRequest(e.Message);
-            }
+                try{
+                    _gameManager.DiscardCard(playerId, cardIndex);
+                    return Ok();
+                }catch(Exception e){
+                    return BadRequest(e.Message);
+                }
             }
             return BadRequest();
         }
@@ -163,9 +163,40 @@ namespace GameManagerService{
                 return Ok(JsonConvert.SerializeObject(result));
             }
             catch(Exception e){
-                return BadRequest(e.StackTrace);
+                return BadRequest(e.Message);
             }
         }
+
+        [HttpGet]
+        [Route("api/[controller]/changeColor")]
+        public async Task<IActionResult> ChangeColor([FromBody] JsonElement request){
+            if (request.TryGetProperty("newColor", out var newColorElement)
+                && request.TryGetProperty("token", out var tokenElement)
+                && request.TryGetProperty("playerId", out var playerIdElement))
+            {
+                int newColor = newColorElement.GetByte();
+                int playerId = playerIdElement.GetInt16();
+                string token = tokenElement.GetString();
+
+
+                string userId = await VerifyTokenCall(token);
+
+                if(userId == "" || int.Parse(userId) != playerId)
+                {
+                    return Unauthorized("You're not verified");
+                }
+                try{
+                    string resultColor =_gameManager.ChangeColor(newColor, playerId);
+                    return Ok(resultColor);
+                }catch(Exception e){
+                    BadRequest(e.Message);
+                }
+                
+            }
+            return BadRequest("");
+        }
+
+        /*------------------ ALL SCOREBOARDS ------------------*/
 
         [HttpGet]
         [Route("/api/[controller]/takeMyLastScoreboard")]

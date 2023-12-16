@@ -16,12 +16,44 @@
         [isHandCard]="false"
         [enemyOrNot]="true"
         (click)="DrawCard()"
+        [ngStyle]="{ rotate: '180deg' }"
       ></app-card>
       <app-card
         [isHandCard]="false"
         [value]="lastCardCoordinates[0][0]"
         [color]="lastCardCoordinates[0][1]"
       ></app-card>
+    </div>
+  </div>
+  <div class="chose-color-popup" *ngIf="changeColorDiscard">
+    <div class="chose-a-color">
+      <p>chose a color</p>
+      <div class="color-container">
+        <div class="row">
+          <div
+            class="color"
+            [ngStyle]="{ 'background-color': 'red' }"
+            (click)="ChangeColor(0)"
+          ></div>
+          <div
+            class="color"
+            [ngStyle]="{ 'background-color': 'orange' }"
+            (click)="ChangeColor(1)"
+          ></div>
+        </div>
+        <div class="row">
+          <div
+            class="color"
+            [ngStyle]="{ 'background-color': 'green' }"
+            (click)="ChangeColor(2)"
+          ></div>
+          <div
+            class="color"
+            [ngStyle]="{ 'background-color': 'blue' }"
+            (click)="ChangeColor(3)"
+          ></div>
+        </div>
+      </div>
     </div>
   </div>
   <div class="my-hand-wrapper">

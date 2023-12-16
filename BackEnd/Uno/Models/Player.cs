@@ -30,14 +30,14 @@ namespace PlayerModel{
                         DiscardCard(cardToDiscard);
                         return cardToDiscard;
                     }
-                    if(_hand[cardIndex].Value == CardValue.DrawTwo && (_hand[cardIndex].Color.ToString() == wildColor || LastCard.Color == _hand[cardIndex].Color)){
+                    if((wildColor != "" && _hand[cardIndex].Value == CardValue.DrawTwo && _hand[cardIndex].Color.ToString() == wildColor) || (wildColor == "" && _hand[cardIndex].Value == CardValue.DrawTwo)){
                         PlayerMoves.Add("discard");
                         Card cardToDiscard = _hand[cardIndex];
                         DiscardCard(cardToDiscard);
                         return cardToDiscard;
                     }
                 }else{
-                    if(_hand[cardIndex].Value == LastCard.Value || (_hand[cardIndex].Color == LastCard.Color || _hand[cardIndex].Color.ToString() == wildColor)){
+                        if(_hand[cardIndex].Value == LastCard.Value || (_hand[cardIndex].Color == LastCard.Color || _hand[cardIndex].Color.ToString() == wildColor)){
                         PlayerMoves.Add("discard");
                         Card cardToDiscard = _hand[cardIndex];
                         DiscardCard(cardToDiscard);
@@ -50,11 +50,43 @@ namespace PlayerModel{
                     }
                 }
             }else if(PlayerMoves.Count > 0){
+                /*
+                
+                cosa posso buttare più carte?
+
+                    magari non ho carte e quindi devo pescare, quindi devo poter fare:
+                        draw, discard
+                    devo poter anche buttare una sequenza dopo aver pescato :
+                        draw, discard, discard
+
+                
+                devo poter buttare più carte che matchano con in numero a terra (se il numero è massimo 9) se la move precedente è discard
+                
+                se invece la move precedente è draw allora devo poter buttare una carta qualunque che matcha con quella a terra
+                    
+                
+                */
+                //devo poter buttare una carta che voglio che l'unica move che ho fatto è draw
+
                 if(PlayerMoves[PlayerMoves.Count -1] == "discard" && LastCard.Score < 10 && _hand[cardIndex].Value == LastCard.Value){
                     PlayerMoves.Add("discard");
                     Card cardToDiscard = _hand[cardIndex];
                     DiscardCard(cardToDiscard);
                     return cardToDiscard;
+                }else if(PlayerMoves[PlayerMoves.Count -1] == "draw"){
+                        
+                    if(_hand[cardIndex].Value == LastCard.Value || (_hand[cardIndex].Color == LastCard.Color || _hand[cardIndex].Color.ToString() == wildColor)){
+                        PlayerMoves.Add("discard");
+                        Card cardToDiscard = _hand[cardIndex];
+                        DiscardCard(cardToDiscard);
+                        return cardToDiscard;
+                    }else if(_hand[cardIndex].Color == CardColor.Wild){
+                        PlayerMoves.Add("discard");
+                        Card cardToDiscard = _hand[cardIndex];
+                        DiscardCard(cardToDiscard);
+                        return cardToDiscard;
+                    }
+                    
                 }
             }
 

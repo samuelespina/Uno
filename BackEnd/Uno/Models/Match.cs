@@ -86,6 +86,9 @@ namespace MatchModel{
         /*----------------- GAME MOVES-----------------*/
 
         public Card DrawCard(int numberOfCardToDraw = 1, bool configDraw = false){
+            if(RoundStatus == RoundStatus.Attack && configDraw == false){
+                throw new Exception("you can't draw while there is an attack streak!");
+            }
             Card newCard = Players[PlayingPlayerIndex].DrawCard(_deck, DiscardPile, numberOfCardToDraw, configDraw);
             return newCard;
         }
@@ -95,18 +98,40 @@ namespace MatchModel{
             DiscardPile.Add(discardCard);
         }
 
-        public List<Card> Next(){
-            Players[PlayingPlayerIndex].ResetPlayerMoves();
+        public string ChangeColor(int newColor){
+            CardColor newCardColor = (CardColor)newColor;
+            WildColor = newCardColor.ToString();
+            return WildColor;
+        }
 
-            if(RoundStatus == RoundStatus.Attack){
+        public List<Card> Next(){
+            if(RoundStatus == RoundStatus.Attack && Players[PlayingPlayerIndex].PlayerMoves.Count == 0){
                 if(!_deck.EnoughCards(AttackStreak)){
                         _deck.ReShuffle(DiscardPile);
                     }
                 DrawCard(AttackStreak, true);
                 AttackStreak = 0;
                 RoundStatus = RoundStatus.Normal;
+                List<Card> playerCardsAfterDraw = Players[PlayingPlayerIndex].ReturnHandStatus();
                 RoundCicleManagement();
+                return playerCardsAfterDraw;
             }
+
+
+            
+            if((Players[PlayingPlayerIndex].PlayerMoves.Count == 0 || Players[PlayingPlayerIndex].PlayerMoves[0] == "draw") 
+            && (DiscardPile[DiscardPile.Count -1].Value == CardValue.DrawFour || DiscardPile[DiscardPile.Count -1].Value == CardValue.DrawTwo || DiscardPile[DiscardPile.Count -1].Value == CardValue.Skip || DiscardPile[DiscardPile.Count -1].Value == CardValue.Reverse)){
+                Players[PlayingPlayerIndex].ResetPlayerMoves();
+                List<Card> playerCards = Players[PlayingPlayerIndex].ReturnHandStatus();
+                RoundCicleManagement();
+                return playerCards;
+            }
+            
+            if(Players[PlayingPlayerIndex].PlayerMoves.Count == 0){
+                throw new Exception("you can't skip if you've not done at least 1 move");
+            }
+
+            Players[PlayingPlayerIndex].ResetPlayerMoves();
 
             RoundStateManagement();
             List<Card> playerNewCards = Players[PlayingPlayerIndex].ReturnHandStatus();
@@ -157,8 +182,8 @@ namespace MatchModel{
                 }
 
                 Players[PlayingPlayerIndex].ResetPlayerMoves();
+                AllChanges[AllChanges.Count -1].SetPlayerId(PlayingPlayerIndex);
                 RoundCicleManagement();
-                AllChanges[AllChanges.Count -1].SetNextPlayer(PlayingPlayerIndex);
             }
             return AllChanges;
         }

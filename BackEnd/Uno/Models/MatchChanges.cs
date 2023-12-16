@@ -4,7 +4,7 @@ namespace MatchChangesModel{
     public class MatchChanges{
         public int HandLength;
         public Card LastCard;
-        public int NextPlayer;
+        public int PlayerId;
         public string WildColor;
 
         public MatchChanges(int handLength, Card lastCard){
@@ -12,8 +12,8 @@ namespace MatchChangesModel{
             LastCard = lastCard;
         }
 
-        public void SetNextPlayer (int nextPlayer){
-            NextPlayer = nextPlayer;
+        public void SetPlayerId (int playerId){
+            PlayerId = playerId;
         }
 
         public void SetWildColor (string wildColor){
@@ -24,7 +24,7 @@ namespace MatchChangesModel{
 
         public override string ToString()
         {
-            return $"\nHand length : {HandLength}\nLast card : {LastCard.ToString()}\nNext player : {NextPlayer}\nWild color : {WildColor}\n\n";
+            return $"\nHand length : {HandLength}\nLast card : {LastCard.ToString()}\nNext player : {PlayerId}\nWild color : {WildColor}\n\n";
         }
     }
 }

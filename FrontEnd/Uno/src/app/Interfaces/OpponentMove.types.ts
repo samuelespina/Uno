@@ -3,6 +3,6 @@ import { Card } from './Card.types';
 export interface OpponentMove {
   HandLength: number;
   LastCard: Card;
-  NextPlayer: number;
+  PlayerId: number;
   WildColor: string;
 }

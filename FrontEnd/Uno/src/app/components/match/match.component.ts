@@ -1,13 +1,14 @@
 import { Component, OnInit } from '@angular/core';
 import { MatchService } from '../../services/match.service';
 import { HttpParams } from '@angular/common/http';
-import { Subscription } from 'rxjs';
+import { Subscription, timeout } from 'rxjs';
 import { Card } from '../../Interfaces/Card.types';
 import { StartGame } from '../../Interfaces/StartGame.types';
 import { CommonModule } from '@angular/common';
 import { CardComponent } from '../card/card.component';
 import { DiscardObj } from '../../Interfaces/DiscardObj.types';
 import { OpponentMove } from '../../Interfaces/OpponentMove.types';
+import { ChangeColorObj } from '../../Interfaces/ChangeColorObj.types';
 
 @Component({
   selector: 'app-match',
@@ -23,6 +24,7 @@ export class MatchComponent implements OnInit {
   lastCard!: Card;
   lastCardCoordinates: Array<Array<number>> = [];
   playingPlayerIndex: number = 0;
+  changeColorDiscard: boolean = false;
 
   constructor(private matchService: MatchService) {}
 
@@ -142,7 +144,7 @@ export class MatchComponent implements OnInit {
       }
 
       if (this.myHand[i].Value == 14) {
-        let color = 579;
+        let color = 859;
         let number = 855;
         cardCoordinates.push(color);
         cardCoordinates.push(number);
@@ -178,7 +180,7 @@ export class MatchComponent implements OnInit {
     }
 
     if (this.lastCard.Value == 14) {
-      let color = 579;
+      let color = 859;
       let number = 855;
       cardCoordinates.push(color);
       cardCoordinates.push(number);
@@ -209,40 +211,40 @@ export class MatchComponent implements OnInit {
   }
 
   DiscardCard(cardIndex: number) {
-    if (this.playingPlayerIndex == 0) {
-      const body: DiscardObj = {
-        playerId: parseInt(localStorage.getItem('id')!),
-        cardIndex: cardIndex,
-        token: localStorage.getItem('token')!,
-      };
+    const body: DiscardObj = {
+      playerId: parseInt(localStorage.getItem('id')!),
+      cardIndex: cardIndex,
+      token: localStorage.getItem('token')!,
+    };
 
-      const params: HttpParams = new HttpParams()
-        .set('playerId', localStorage.getItem('id')!)
-        .set('token', localStorage.getItem('token')!);
+    const params: HttpParams = new HttpParams()
+      .set('playerId', localStorage.getItem('id')!)
+      .set('token', localStorage.getItem('token')!);
 
-      const discardCardSubscription: Subscription = this.matchService
-        .DiscardCard(body)
-        .subscribe({
-          next: (res) => {
-            this.myHand.splice(cardIndex, 1);
-            this.myHandCardCoordinates.splice(cardIndex, 1);
-            const TakeLastCardSubscription: Subscription = this.matchService
-              .TakeLastCard(params)
-              .subscribe({
-                next: (lastCard) => {
-                  this.lastCard = lastCard;
-                  this.lastCardCoordinates = [];
-                  this.LastCardCalc();
-                  console.log('new card !!!' + this.lastCard);
-                },
-                error: (err) => console.log(err),
-                complete: () => TakeLastCardSubscription.unsubscribe(),
-              });
-          },
-          error: (err) => console.log(err.error),
-          complete: () => discardCardSubscription.unsubscribe(),
-        });
-    }
+    const discardCardSubscription: Subscription = this.matchService
+      .DiscardCard(body)
+      .subscribe({
+        next: (res) => {
+          this.myHand.splice(cardIndex, 1);
+          this.myHandCardCoordinates.splice(cardIndex, 1);
+          const TakeLastCardSubscription: Subscription = this.matchService
+            .TakeLastCard(params)
+            .subscribe({
+              next: (lastCard) => {
+                this.lastCard = lastCard;
+                this.lastCardCoordinates = [];
+                this.LastCardCalc();
+                if (lastCard.Color == 4) {
+                  this.changeColorDiscard = true;
+                }
+              },
+              error: (err) => console.log(err),
+              complete: () => TakeLastCardSubscription.unsubscribe(),
+            });
+        },
+        error: (err) => console.log(err.error),
+        complete: () => discardCardSubscription.unsubscribe(),
+      });
   }
 
   Next() {
@@ -260,7 +262,11 @@ export class MatchComponent implements OnInit {
 
             const opponentHandLengthSubscription: Subscription =
               this.matchService.OpponentAIMoves(params).subscribe({
-                next: (opponentMoves) => console.log(opponentMoves),
+                next: (opponentMoves) => {
+                  console.log('Opponent Moves');
+                  console.log(opponentMoves);
+                  this.ShowAllOpponentsMoves(opponentMoves);
+                },
                 error: (err) => console.log(err.error),
                 complete: () => opponentHandLengthSubscription.unsubscribe(),
               });
@@ -271,7 +277,29 @@ export class MatchComponent implements OnInit {
     }
   }
 
-  ShowAllOpponentsMoves(opponentsMoves: Array<OpponentMove>) {
-    for (let i = 0; i < opponentsMoves.length; i++) {}
+  async ShowAllOpponentsMoves(opponentsMoves: Array<OpponentMove>) {
+    for (let i = 0; i < opponentsMoves.length; i++) {
+      this.opponentHandsLength[opponentsMoves[i].PlayerId - 1] =
+        opponentsMoves[i].HandLength;
+      this.lastCard = opponentsMoves[i].LastCard;
+      this.lastCardCoordinates = [];
+      this.LastCardCalc();
+
+      await this.delay(2000);
+    }
+  }
+
+  delay(ms: number): Promise<void> {
+    return new Promise((resolve) => setTimeout(resolve, ms));
+  }
+
+  ChangeColor(newColorIndex: number) {
+    const body: ChangeColorObj = {
+      newColor: newColorIndex,
+      playerId: parseInt(localStorage.getItem('id')!),
+      token: localStorage.getItem('token')!,
+    };
+
+    this.matchService.ChangeColor(body);
   }
 }

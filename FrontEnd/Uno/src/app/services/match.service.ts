@@ -8,6 +8,7 @@ import { StartGame } from '../Interfaces/StartGame.types';
 import { Params } from '@angular/router';
 import { DiscardObj } from '../Interfaces/DiscardObj.types';
 import { OpponentMove } from '../Interfaces/OpponentMove.types';
+import { ChangeColorObj } from '../Interfaces/ChangeColorObj.types';
 
 @Injectable({
   providedIn: 'root',
@@ -158,5 +159,18 @@ export class MatchService {
       });
 
     return opponentHandLengthSubject;
+  }
+
+  ChangeColor(body: ChangeColorObj) {
+    const changeColorSubscription: Subscription = this.api
+      .Post<string>(
+        `${environment.apiGameEndpoint}/api/GameManager/changeColor`,
+        body
+      )
+      .subscribe({
+        next: (res) => console.log(res),
+        error: (err) => console.log(err.error),
+        complete: () => changeColorSubscription.unsubscribe(),
+      });
   }
 }

@@ -70,6 +70,11 @@ namespace GameManagerModel{
             return playerNewCards;
         }
 
+        public string ChangeColor(int newColor, int matchId){
+            Match myMatch = FindMyMatch(matchId);
+            return myMatch.ChangeColor(newColor);
+        }
+
         public SortedList<int, List<int>> TakeLastScoreboard(int playerId){
             Match lastMatch = null;
 
