@@ -236,7 +236,7 @@ namespace GameManagerService{
 
         [HttpGet]
         [Route("/api/[controller]/watchLeaderBoard")]
-        public async Task<IActionResult> WatchLeaderBoard([FromQuery] string token, [FromQuery] int playerId){
+        public async Task<IActionResult> WatchLeaderBoard([FromQuery] int playerId, [FromQuery] string token){
             string userId = await VerifyTokenCall(token);
 
             if(userId == "" || int.Parse(userId) != playerId)

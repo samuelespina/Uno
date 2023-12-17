@@ -4,6 +4,7 @@ import { HttpParams } from '@angular/common/http';
 import { Subscription } from 'rxjs';
 import { Route, Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
+import { HomeService } from '../../services/home.service';
 
 @Component({
   selector: 'app-home',
@@ -16,7 +17,11 @@ export class HomeComponent implements OnInit {
   startGameStatus: boolean = true;
   botNUmber: number = 1;
 
-  constructor(private matchService: MatchService, private router: Router) {}
+  constructor(
+    private matchService: MatchService,
+    private router: Router,
+    private homeService: HomeService
+  ) {}
 
   ngOnInit(): void {
     const params: HttpParams = new HttpParams()
@@ -43,5 +48,12 @@ export class HomeComponent implements OnInit {
     this.matchService.botNumber = this.botNUmber;
     this.matchService.startGameStatus = this.startGameStatus;
     this.router.navigate(['match']);
+  }
+
+  WatchLeaderBoard() {
+    const params: HttpParams = new HttpParams()
+      .set('playerId', localStorage.getItem('id')!)
+      .set('token', localStorage.getItem('token')!);
+    this.homeService.WatchLeaderBoard(params);
   }
 }

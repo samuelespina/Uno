@@ -106,15 +106,20 @@ namespace GameManagerModel{
         public SortedList<decimal, List<string>> WatchLeaderBoard(){
             List<Player> players = new List<Player>();
 
-            _finishedMatches.ForEach((match)=>{
-                players.Add(match.Players[0]);
-            });
+            _finishedMatches.ForEach((match) =>
+                {
+                    Player playerToAdd = match.Players[0];
+                    if (!players.Any(p => p.Id == playerToAdd.Id))
+                    {
+                        players.Add(playerToAdd);
+                    }
+                });
 
-            SortedList<decimal, List<string>> leaderBoard = new();
+            SortedList<decimal, List<string>> leaderBoard = new(Comparer<decimal>.Create((x, y) => y.CompareTo(x)));
 
             players.ForEach((player)=>{
-                int numberOfMatchs = 0;
-                int numberOfWins = 0;
+                decimal numberOfMatchs = 0;
+                decimal numberOfWins = 0;
 
                 _finishedMatches.ForEach((match)=>{
                     if(player.Id == match.hostId){
