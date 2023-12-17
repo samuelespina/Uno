@@ -30,6 +30,8 @@ export class MatchComponent implements OnInit {
   wildColor!: string;
   isMyTurn: boolean = true;
   isFinished: boolean = false;
+  errorMessage: string = '';
+  errorMessageAnimation: boolean = false;
 
   constructor(private matchService: MatchService, private router: Router) {}
 
@@ -204,11 +206,20 @@ export class MatchComponent implements OnInit {
       const drawCardSubscription: Subscription = this.matchService
         .DrawCard(params)
         .subscribe({
-          next: (newCard: Card) => {
-            console.log(newCard);
-            this.myHand.push(newCard);
-            this.myHandCardCoordinates = [];
-            this.MyCardCalc();
+          next: (callResult) => {
+            if (callResult) {
+              this.errorMessageAnimation = false;
+              this.errorMessage = '';
+              this.myHand.push(this.matchService.newCard);
+              this.myHandCardCoordinates = [];
+              this.MyCardCalc();
+            } else {
+              this.errorMessage = this.matchService.errorMessage;
+              this.errorMessageAnimation = true;
+              setTimeout(() => {
+                this.errorMessageAnimation = false;
+              }, 3000);
+            }
           },
           error: (err) => console.log(err.error),
           complete: () => drawCardSubscription.unsubscribe(),
@@ -231,28 +242,38 @@ export class MatchComponent implements OnInit {
       const discardCardSubscription: Subscription = this.matchService
         .DiscardCard(body)
         .subscribe({
-          next: async (res) => {
-            this.myHand.splice(cardIndex, 1);
-            this.myHandCardCoordinates.splice(cardIndex, 1);
-            if (this.myHand.length == 0) {
-              await this.delay(500);
-              this.isFinished = true;
-              console.log(this.isFinished);
+          next: async (callResult) => {
+            if (callResult) {
+              this.errorMessageAnimation = false;
+              this.errorMessage = '';
+              this.myHand.splice(cardIndex, 1);
+              this.myHandCardCoordinates.splice(cardIndex, 1);
+              if (this.myHand.length == 0) {
+                await this.delay(500);
+                this.isFinished = true;
+                console.log(this.isFinished);
+              }
+              const TakeLastCardSubscription: Subscription = this.matchService
+                .TakeLastCard(params)
+                .subscribe({
+                  next: (lastCard) => {
+                    this.lastCard = lastCard;
+                    this.lastCardCoordinates = [];
+                    this.LastCardCalc();
+                    if (lastCard.Color == 4) {
+                      this.changeColorDiscard = true;
+                    }
+                  },
+                  error: (err) => console.log(err),
+                  complete: () => TakeLastCardSubscription.unsubscribe(),
+                });
+            } else {
+              this.errorMessage = this.matchService.errorMessage;
+              this.errorMessageAnimation = true;
+              setTimeout(() => {
+                this.errorMessageAnimation = false;
+              }, 3000);
             }
-            const TakeLastCardSubscription: Subscription = this.matchService
-              .TakeLastCard(params)
-              .subscribe({
-                next: (lastCard) => {
-                  this.lastCard = lastCard;
-                  this.lastCardCoordinates = [];
-                  this.LastCardCalc();
-                  if (lastCard.Color == 4) {
-                    this.changeColorDiscard = true;
-                  }
-                },
-                error: (err) => console.log(err),
-                complete: () => TakeLastCardSubscription.unsubscribe(),
-              });
           },
           error: (err) => console.log(err.error),
           complete: () => discardCardSubscription.unsubscribe(),
@@ -269,20 +290,31 @@ export class MatchComponent implements OnInit {
       const nextSubscription: Subscription = this.matchService
         .Next(params)
         .subscribe({
-          next: (playerNewCard: Array<Card>) => {
-            (this.myHand = playerNewCard), (this.myHandCardCoordinates = []);
-            this.MyCardCalc();
+          next: (callResult) => {
+            if (callResult) {
+              this.errorMessageAnimation = false;
+              this.errorMessage = '';
+              (this.myHand = this.matchService.playerNewCards),
+                (this.myHandCardCoordinates = []);
+              this.MyCardCalc();
 
-            const opponentHandLengthSubscription: Subscription =
-              this.matchService.OpponentAIMoves(params).subscribe({
-                next: (opponentMoves) => {
-                  console.log('Opponent Moves');
-                  console.log(opponentMoves);
-                  this.ShowAllOpponentsMoves(opponentMoves);
-                },
-                error: (err) => console.log(err.error),
-                complete: () => opponentHandLengthSubscription.unsubscribe(),
-              });
+              const opponentHandLengthSubscription: Subscription =
+                this.matchService.OpponentAIMoves(params).subscribe({
+                  next: (opponentMoves) => {
+                    console.log('Opponent Moves');
+                    console.log(opponentMoves);
+                    this.ShowAllOpponentsMoves(opponentMoves);
+                  },
+                  error: (err) => console.log(err.error),
+                  complete: () => opponentHandLengthSubscription.unsubscribe(),
+                });
+            } else {
+              this.errorMessage = this.matchService.errorMessage;
+              this.errorMessageAnimation = true;
+              setTimeout(() => {
+                this.errorMessageAnimation = false;
+              }, 3000);
+            }
           },
           error: (err) => console.log(err.error),
           complete: () => nextSubscription.unsubscribe(),

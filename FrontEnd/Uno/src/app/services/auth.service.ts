@@ -10,6 +10,8 @@ import { UserCredentials } from '../Interfaces/UserCredentials.types';
   providedIn: 'root',
 })
 export class AuthService {
+  errorMessage: string = '';
+
   constructor(private api: ApiService, private router: Router) {}
 
   async sha256(message: string): Promise<string> {
@@ -29,7 +31,7 @@ export class AuthService {
   }
 
   Login(body: UserCredentials) {
-    let errorMessageSubject: Subject<string> = new Subject<string>();
+    let callStatusSubject: Subject<boolean> = new Subject<boolean>();
 
     const tokenGenerationSubscription: Subscription = this.api
       .Post<string>(
@@ -62,20 +64,25 @@ export class AuthService {
                       localStorage.setItem('name', info[1]);
                       localStorage.setItem('surname', info[2]);
                       this.router.navigate(['']);
+                      callStatusSubject.next(true);
                     },
                     error: (err) => console.log(err),
                     complete: () => returnViewSubscription.unsubscribe(),
                   });
               },
-              error: (err) =>
-                errorMessageSubject.next('email or password wrong'),
+              error: (err) => {
+                this.errorMessage = 'password wrong';
+                callStatusSubject.next(false);
+              },
               complete: () => verifyCredentialsSubscription.unsubscribe(),
             });
         },
-        error: (err) => errorMessageSubject.next('email not found'),
+        error: (err) => {
+          this.errorMessage = 'email wrong';
+          callStatusSubject.next(false);
+        },
         complete: () => tokenGenerationSubscription.unsubscribe(),
       });
-
-    return errorMessageSubject;
+    return callStatusSubject;
   }
 }

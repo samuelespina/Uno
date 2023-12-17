@@ -2,8 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { AuthService } from '../../services/auth.service';
-import { Subscription } from 'rxjs';
 import { UserCredentials } from '../../Interfaces/UserCredentials.types';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-form',
@@ -26,14 +26,26 @@ export class LoginComponent implements OnInit {
       password: new FormControl(),
     });
   }
-  Submit() {
+  async Submit() {
     for (var [key, value] of Object.entries(this.loginForm.controls)) {
       this.data = { ...this.data, [key]: value.value };
     }
-    const Login: Subscription = this.auth
+    const loginSubscription: Subscription = this.auth
       .Login(this.data)
-      .subscribe((errorMessage: string) => {
-        this.errorMessage = errorMessage;
+      .subscribe({
+        next: (callStatus) => {
+          console.log(callStatus);
+          if (!callStatus) {
+            this.errorMessage = this.auth.errorMessage;
+            console.log(this.errorMessage), console.log(this.auth.errorMessage);
+          }
+        },
+        error: (err) => {
+          console.log(err.error);
+        },
+        complete: () => {
+          loginSubscription.unsubscribe();
+        },
       });
   }
 }

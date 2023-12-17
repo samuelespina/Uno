@@ -16,6 +16,9 @@ import { ChangeColorObj } from '../Interfaces/ChangeColorObj.types';
 export class MatchService {
   startGameStatus!: boolean;
   botNumber!: number;
+  errorMessage: string = '';
+  newCard!: Card;
+  playerNewCards!: Array<Card>;
 
   constructor(private api: ApiService) {}
 
@@ -92,39 +95,46 @@ export class MatchService {
   }
 
   DrawCard(params: Params) {
-    let newCardSubject: Subject<Card> = new Subject<Card>();
+    let callStatusSubject: Subject<boolean> = new Subject<boolean>();
 
     const drawCardSubscription: Subscription = this.api
       .Get<Card>(`${environment.apiGameEndpoint}/api/GameManager/drawCard`, {
         params,
       })
       .subscribe({
-        next: (newCard) => newCardSubject.next(newCard),
-        error: (err) => console.log(err.error),
+        next: (newCard) => {
+          this.newCard = newCard;
+          callStatusSubject.next(true);
+        },
+        error: (err) => {
+          this.errorMessage = err.error;
+          callStatusSubject.next(false);
+        },
         complete: () => drawCardSubscription.unsubscribe(),
       });
 
-    return newCardSubject;
+    return callStatusSubject;
   }
 
   DiscardCard(body: DiscardObj) {
-    let discardResponse: Subject<boolean> = new Subject<boolean>();
+    let callStatusSubject: Subject<boolean> = new Subject<boolean>();
 
     const discardCardSubscription: Subscription = this.api
       .Post(`${environment.apiGameEndpoint}/api/GameManager/discardCard`, body)
       .subscribe({
-        next: (res) => discardResponse.next(true),
-        error: (err) => console.log(err.error),
+        next: (res) => callStatusSubject.next(true),
+        error: (err) => {
+          this.errorMessage = err.error;
+          callStatusSubject.next(false);
+        },
         complete: () => discardCardSubscription.unsubscribe(),
       });
 
-    return discardResponse;
+    return callStatusSubject;
   }
 
   Next(params: HttpParams) {
-    let playerNewCardsSubject: Subject<Array<Card>> = new Subject<
-      Array<Card>
-    >();
+    let callStatusSubject: Subject<boolean> = new Subject<boolean>();
 
     const nextSubscription: Subscription = this.api
       .Get<Array<Card>>(`${environment.apiGameEndpoint}/api/GameManager/next`, {
@@ -132,14 +142,17 @@ export class MatchService {
       })
       .subscribe({
         next: (playerNewCards) => {
-          playerNewCardsSubject.next(playerNewCards);
-          console.log(playerNewCards);
+          this.playerNewCards = playerNewCards;
+          callStatusSubject.next(true);
         },
-        error: (err) => console.log(err.error),
+        error: (err) => {
+          this.errorMessage = err.error;
+          callStatusSubject.next(false);
+        },
         complete: () => nextSubscription.unsubscribe(),
       });
 
-    return playerNewCardsSubject;
+    return callStatusSubject;
   }
 
   OpponentAIMoves(params: HttpParams) {

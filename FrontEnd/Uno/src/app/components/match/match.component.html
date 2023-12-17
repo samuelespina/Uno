@@ -91,5 +91,11 @@
       </app-card>
     </div>
     <button class="next" (click)="Next()">NEXT</button>
+    <p
+      class="error-message"
+      [ngClass]="errorMessageAnimation ? 'error-animation' : ''"
+    >
+      {{ errorMessage }}
+    </p>
   </div>
 </div>
