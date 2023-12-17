@@ -1,15 +1,39 @@
-<div class="scoreboard-page">
-  <div class="scoreboard">
-    <button (click)="TakeLastScoreboard()"></button>
-    <button type="button" class="btn btn-primary">Primary</button>
-    <button type="button" class="btn btn-secondary">Secondary</button>
-    <button type="button" class="btn btn-success">Success</button>
-    <button type="button" class="btn btn-danger">Danger</button>
-    <button type="button" class="btn btn-warning">Warning</button>
-    <button type="button" class="btn btn-info">Info</button>
-    <button type="button" class="btn btn-light">Light</button>
-    <button type="button" class="btn btn-dark">Dark</button>
-
-    <button type="button" class="btn btn-link">Link</button>
+<div
+  class="scoreboard-page d-flex justify-content-center align-items-center vw-100 vh-100 position-absolute fw-bold"
+>
+  <div
+    class="scoreboard d-flex flex-column justify-content-evenly align-items-center rounded-4 border-0 p-4"
+  >
+    <h2>Match Scoreboard</h2>
+    <div
+      class="scoreboard-rows-container d-flex flex-column justify-content-center align-items-center"
+    >
+      <div
+        class="scoreboard-row-fields d-flex justify-content-evenly align-items-center"
+      >
+        <div>Score</div>
+        <div>Player</div>
+      </div>
+      <div
+        class="scoreboard-row d-flex justify-content-evenly align-items-center rounded-4 p-4"
+        *ngFor="let key of ObjectKeys(); index as i"
+        [ngStyle]="{
+          'background-color': i % 2 == 0 ? 'white' : 'rgb(240, 240, 240)'
+        }"
+      >
+        <div>
+          {{ key }}
+        </div>
+        <div *ngFor="let playerId of scoreBoard[key]">
+          {{ playerId == 0 ? "You" : playerId }}
+        </div>
+      </div>
+    </div>
+    <button
+      class="home position-absolute border-0 p-2 rounded-4 fw-bold"
+      (click)="BackHome()"
+    >
+      HOME
+    </button>
   </div>
 </div>

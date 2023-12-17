@@ -29,7 +29,7 @@ export class MatchComponent implements OnInit {
   changeColorDiscard: boolean = false;
   wildColor!: string;
   isMyTurn: boolean = true;
-  isFinished: boolean = true;
+  isFinished: boolean = false;
 
   constructor(private matchService: MatchService, private router: Router) {}
 
@@ -231,23 +231,23 @@ export class MatchComponent implements OnInit {
       const discardCardSubscription: Subscription = this.matchService
         .DiscardCard(body)
         .subscribe({
-          next: (res) => {
+          next: async (res) => {
             this.myHand.splice(cardIndex, 1);
             this.myHandCardCoordinates.splice(cardIndex, 1);
+            if (this.myHand.length == 0) {
+              await this.delay(500);
+              this.isFinished = true;
+              console.log(this.isFinished);
+            }
             const TakeLastCardSubscription: Subscription = this.matchService
               .TakeLastCard(params)
               .subscribe({
-                next: async (lastCard) => {
+                next: (lastCard) => {
                   this.lastCard = lastCard;
                   this.lastCardCoordinates = [];
                   this.LastCardCalc();
                   if (lastCard.Color == 4) {
                     this.changeColorDiscard = true;
-                  }
-
-                  if (this.myHand.length == 0) {
-                    await this.delay(1000);
-                    this.isFinished = true;
                   }
                 },
                 error: (err) => console.log(err),
@@ -302,7 +302,7 @@ export class MatchComponent implements OnInit {
       this.lastCardCoordinates = [];
       this.LastCardCalc();
 
-      await this.delay(1000);
+      await this.delay(500);
     }
     this.playingPlayerIndex = 0;
     this.isMyTurn = true;
@@ -310,6 +310,7 @@ export class MatchComponent implements OnInit {
     if (opponentsMoves[opponentsMoves.length - 1].HandLength == 0) {
       await this.delay(1000);
       this.isFinished = true;
+      console.log(this.isFinished);
     }
   }
 

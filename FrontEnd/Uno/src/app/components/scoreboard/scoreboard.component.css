@@ -1,0 +1,35 @@
+.scoreboard-page {
+  background-color: rgba(0, 0, 0, 0.8);
+  z-index: 2;
+}
+
+.home {
+  bottom: 1rem;
+  right: 1rem;
+  font-weight: bold;
+  color: white;
+  background-color: black;
+  transition: all 0.2s ease-in-out;
+}
+
+.home:hover {
+  transform: translateY(-0.2rem);
+  color: red;
+  background-color: white;
+}
+
+.scoreboard {
+  background-color: rgb(222, 0, 0);
+  width: 40%;
+  height: 40%;
+  position: relative;
+}
+
+.scoreboard-rows-container {
+  width: 80%;
+}
+
+.scoreboard-row,
+.scoreboard-row-fields {
+  width: 80%;
+}

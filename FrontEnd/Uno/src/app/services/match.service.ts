@@ -187,7 +187,7 @@ export class MatchService {
         { params }
       )
       .subscribe({
-        next: (lastScoreboard) => console.log(lastScoreboard),
+        next: (lastScoreboard) => lastScoreboardSubject.next(lastScoreboard),
         error: (err) => console.log(err.error),
         complete: () => takeLastScoreboardSubscription.unsubscribe(),
       });

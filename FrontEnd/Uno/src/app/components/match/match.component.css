@@ -28,7 +28,7 @@
   width: 100vw;
 }
 
-.table {
+.cards-on-table {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -107,7 +107,7 @@
 
 .next {
   position: relative;
-  top: 1rem;
+  top: 2.5rem;
   left: 1rem;
   padding: 0.5rem;
   border-radius: 1rem;
