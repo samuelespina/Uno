@@ -126,7 +126,7 @@ namespace MatchModel{
                 throw new Exception("you can't skip if you've not done at least 1 move");
             }
             
-            if(Players[PlayingPlayerIndex].PlayerMoves[0] == "draw"
+            if(!Players[PlayingPlayerIndex].PlayerMoves.Contains("discard")
             && (DiscardPile[DiscardPile.Count -1].Value == CardValue.DrawFour || DiscardPile[DiscardPile.Count -1].Value == CardValue.DrawTwo || DiscardPile[DiscardPile.Count -1].Value == CardValue.Skip || DiscardPile[DiscardPile.Count -1].Value == CardValue.Reverse)){
                 Players[PlayingPlayerIndex].ResetPlayerMoves();
                 List<Card> playerCards = Players[PlayingPlayerIndex].ReturnHandStatus();
