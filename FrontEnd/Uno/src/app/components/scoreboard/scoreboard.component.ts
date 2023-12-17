@@ -5,6 +5,8 @@ import { IScoreboard } from '../../Interfaces/IScoreboard.types';
 import { Subscription } from 'rxjs';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
+import { ILeaderBoard } from '../../Interfaces/ILeaderBoard.types';
+import { ScoreboardService } from '../../services/scoreboard.service';
 
 @Component({
   selector: 'app-scoreboard',
@@ -15,11 +17,20 @@ import { Router } from '@angular/router';
 })
 export class ScoreboardComponent implements OnInit {
   scoreBoard!: IScoreboard;
+  leaderBoard!: ILeaderBoard;
+  typeOfScoreboard: number = 0;
+  scoreboardKey!: any[];
 
-  constructor(private matchService: MatchService, private router: Router) {}
+  constructor(
+    private router: Router,
+    private scoreboardService: ScoreboardService
+  ) {}
 
   ngOnInit(): void {
-    this.TakeLastScoreboard();
+    console.log(this.scoreboardService.typeOfScoreboard);
+    this.typeOfScoreboard = this.scoreboardService.typeOfScoreboard;
+    if (this.scoreboardService.typeOfScoreboard == 0) this.TakeLastScoreboard();
+    if (this.scoreboardService.typeOfScoreboard == 2) this.WatchLeaderBoard();
   }
 
   TakeLastScoreboard() {
@@ -27,19 +38,38 @@ export class ScoreboardComponent implements OnInit {
       .set('playerId', parseInt(localStorage.getItem('id')!))
       .set('token', localStorage.getItem('token')!);
 
-    const takeLastScoreboardSubscription: Subscription = this.matchService
+    const takeLastScoreboardSubscription: Subscription = this.scoreboardService
       .TakeLastScoreboard(params)
       .subscribe({
-        next: (lastScoreboard) => (
-          (this.scoreBoard = lastScoreboard), console.log(this.scoreBoard)
-        ),
+        next: (lastScoreboard) => {
+          (this.scoreBoard = lastScoreboard),
+            (this.scoreboardKey = this.ObjectKeys(this.scoreBoard));
+        },
         error: (err) => console.log(err.error),
         complete: () => takeLastScoreboardSubscription,
       });
   }
 
-  ObjectKeys(): any[] {
-    return Object.keys(this.scoreBoard);
+  WatchLeaderBoard() {
+    const params: HttpParams = new HttpParams()
+      .set('playerId', localStorage.getItem('id')!)
+      .set('token', localStorage.getItem('token')!);
+
+    const watchLeaderBoardSubscription: Subscription = this.scoreboardService
+      .WatchLeaderBoard(params)
+      .subscribe({
+        next: (leaderBoard) => {
+          this.leaderBoard = leaderBoard;
+          this.scoreboardKey = this.ObjectKeys(leaderBoard);
+          console.log(this.leaderBoard);
+        },
+        error: (err) => console.log(err.error),
+        complete: () => watchLeaderBoardSubscription.unsubscribe(),
+      });
+  }
+
+  ObjectKeys(scoreboard: IScoreboard | ILeaderBoard): any[] {
+    return Object.keys(scoreboard);
   }
 
   BackHome() {

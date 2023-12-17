@@ -16,17 +16,24 @@
       </div>
       <div
         class="scoreboard-row d-flex justify-content-evenly align-items-center rounded-4 p-4"
-        *ngFor="let key of ObjectKeys(); index as i"
+        *ngFor="let key of scoreboardKey; index as i"
         [ngStyle]="{
           'background-color': i % 2 == 0 ? 'white' : 'rgb(240, 240, 240)'
         }"
       >
         <div>
-          {{ key }}
+          {{ key | number : "1.2-2" }}
         </div>
-        <div *ngFor="let playerId of scoreBoard[key]">
-          {{ playerId == 0 ? "You" : playerId }}
-        </div>
+        <ng-container *ngIf="typeOfScoreboard == 0">
+          <div *ngFor="let playerId of scoreBoard[key]">
+            {{ playerId == 0 ? "You" : playerId }}
+          </div>
+        </ng-container>
+        <ng-container *ngIf="typeOfScoreboard == 2">
+          <div *ngFor="let playerName of leaderBoard[key]">
+            {{ playerName }}
+          </div>
+        </ng-container>
       </div>
     </div>
     <button

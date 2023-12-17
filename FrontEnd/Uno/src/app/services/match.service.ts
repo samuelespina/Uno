@@ -191,23 +191,6 @@ export class MatchService {
     return newColorSubject;
   }
 
-  TakeLastScoreboard(params: HttpParams) {
-    let lastScoreboardSubject: Subject<any> = new Subject<any>();
-
-    const takeLastScoreboardSubscription: Subscription = this.api
-      .Get(
-        `${environment.apiGameEndpoint}/api/GameManager/takeMyLastScoreboard`,
-        { params }
-      )
-      .subscribe({
-        next: (lastScoreboard) => lastScoreboardSubject.next(lastScoreboard),
-        error: (err) => console.log(err.error),
-        complete: () => takeLastScoreboardSubscription.unsubscribe(),
-      });
-
-    return lastScoreboardSubject;
-  }
-
   SaveMatch(params: HttpParams) {
     const saveMatchSubscription: Subscription = this.api
       .Get(`${environment.apiGameEndpoint}/api/GameManager/saveMatch`, {

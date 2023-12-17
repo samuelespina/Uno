@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { MatchService } from '../../services/match.service';
 import { HttpParams } from '@angular/common/http';
-import { Subscription, timeout } from 'rxjs';
+import { Subscription, delay, timeout } from 'rxjs';
 import { Card } from '../../Interfaces/Card.types';
 import { StartGame } from '../../Interfaces/StartGame.types';
 import { CommonModule } from '@angular/common';
@@ -11,6 +11,7 @@ import { OpponentMove } from '../../Interfaces/OpponentMove.types';
 import { ChangeColorObj } from '../../Interfaces/ChangeColorObj.types';
 import { Router } from '@angular/router';
 import { ScoreboardComponent } from '../scoreboard/scoreboard.component';
+import { ScoreboardService } from '../../services/scoreboard.service';
 
 @Component({
   selector: 'app-match',
@@ -29,11 +30,14 @@ export class MatchComponent implements OnInit {
   changeColorDiscard: boolean = false;
   wildColor!: string;
   isMyTurn: boolean = true;
-  isFinished: boolean = false;
   errorMessage: string = '';
   errorMessageAnimation: boolean = false;
 
-  constructor(private matchService: MatchService, private router: Router) {}
+  constructor(
+    private matchService: MatchService,
+    private router: Router,
+    private scoreboardService: ScoreboardService
+  ) {}
 
   ngOnInit(): void {
     const params: HttpParams = new HttpParams()
@@ -249,9 +253,10 @@ export class MatchComponent implements OnInit {
               this.myHand.splice(cardIndex, 1);
               this.myHandCardCoordinates.splice(cardIndex, 1);
               if (this.myHand.length == 0) {
-                await this.delay(500);
-                this.isFinished = true;
-                console.log(this.isFinished);
+                setTimeout(() => {
+                  this.scoreboardService.ChangeTypeOfScoreboard(0);
+                  this.router.navigate(['scoreboard']);
+                }, 500);
               }
               const TakeLastCardSubscription: Subscription = this.matchService
                 .TakeLastCard(params)
@@ -334,15 +339,16 @@ export class MatchComponent implements OnInit {
       this.lastCardCoordinates = [];
       this.LastCardCalc();
 
-      await this.delay(500);
+      await this.delay(700);
     }
     this.playingPlayerIndex = 0;
     this.isMyTurn = true;
 
     if (opponentsMoves[opponentsMoves.length - 1].HandLength == 0) {
-      await this.delay(1000);
-      this.isFinished = true;
-      console.log(this.isFinished);
+      setTimeout(() => {
+        this.scoreboardService.ChangeTypeOfScoreboard(0);
+        this.router.navigate(['scoreboard']);
+      }, 1000);
     }
   }
 

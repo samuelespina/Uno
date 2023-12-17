@@ -115,7 +115,7 @@ namespace GameManagerModel{
                     }
                 });
 
-            SortedList<decimal, List<string>> leaderBoard = new(Comparer<decimal>.Create((x, y) => y.CompareTo(x)));
+            SortedList<decimal, List<string>> leaderBoard = new();
 
             players.ForEach((player)=>{
                 decimal numberOfMatchs = 0;

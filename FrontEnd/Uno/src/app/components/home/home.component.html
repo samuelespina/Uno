@@ -2,8 +2,8 @@
   class="home-page-container"
   [style.background-image]="'url(assets/img/GabeBackground.jpg)'"
 >
-  <div>see all your matches</div>
-  <div (click)="WatchLeaderBoard()">see the leaderboard</div>
+  <div (click)="ChangeTypeOfScoreboard(1)">see all your matches</div>
+  <div (click)="ChangeTypeOfScoreboard(2)">see the leaderboard</div>
   <div class="options-container">
     <button
       class="start"
