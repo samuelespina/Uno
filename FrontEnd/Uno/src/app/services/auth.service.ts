@@ -40,12 +40,7 @@ export class AuthService {
         next: async (challenge) => {
           let passwordHash: string = await this.sha256(body.password);
           let passwordHashWithChallenge: string = passwordHash + challenge;
-          let hashPasswordAndChallenge: string = await this.sha256(
-            passwordHashWithChallenge
-          );
-          body.password = hashPasswordAndChallenge;
-
-          console.log(hashPasswordAndChallenge);
+          body.password = passwordHashWithChallenge;
 
           const verifyCredentialsSubscription: Subscription = this.api
             .Post<string>(

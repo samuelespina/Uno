@@ -92,7 +92,7 @@ namespace Authentication.UserModel
 
         public string VerifyCredentials(string passwordWithChallenge)
         {
-            if(passwordWithChallenge == HashPassword(_password+_challenge) && Status)//mettere l'hash
+            if(passwordWithChallenge == $"{_password}{_challenge}" && Status)//HashPassword(_password+_challenge) is better, but the hash doesn't work the same in differents machines 
             {
                 _userToken = GenerateToken();
                 return _userToken.TokenCode;
