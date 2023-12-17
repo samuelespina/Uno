@@ -366,4 +366,11 @@ export class MatchComponent implements OnInit {
       });
     this.changeColorDiscard = false;
   }
+
+  SaveMatch() {
+    const params: HttpParams = new HttpParams()
+      .set('playerId', localStorage.getItem('id')!)
+      .set('token', localStorage.getItem('token')!);
+    this.matchService.SaveMatch(params);
+  }
 }

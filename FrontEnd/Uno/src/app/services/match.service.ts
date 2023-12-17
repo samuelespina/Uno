@@ -5,7 +5,7 @@ import { Subject, Subscription } from 'rxjs';
 import { HttpParams } from '@angular/common/http';
 import { Card } from '../Interfaces/Card.types';
 import { StartGame } from '../Interfaces/StartGame.types';
-import { Params } from '@angular/router';
+import { Params, Router } from '@angular/router';
 import { DiscardObj } from '../Interfaces/DiscardObj.types';
 import { OpponentMove } from '../Interfaces/OpponentMove.types';
 import { ChangeColorObj } from '../Interfaces/ChangeColorObj.types';
@@ -20,7 +20,7 @@ export class MatchService {
   newCard!: Card;
   playerNewCards!: Array<Card>;
 
-  constructor(private api: ApiService) {}
+  constructor(private api: ApiService, private router: Router) {}
 
   StartGame(body: StartGame) {
     let myHandSubject: Subject<Array<Card>> = new Subject<Array<Card>>();
@@ -206,5 +206,17 @@ export class MatchService {
       });
 
     return lastScoreboardSubject;
+  }
+
+  SaveMatch(params: HttpParams) {
+    const saveMatchSubscription: Subscription = this.api
+      .Get(`${environment.apiGameEndpoint}/api/GameManager/saveMatch`, {
+        params,
+      })
+      .subscribe({
+        next: () => this.router.navigate(['']),
+        error: (err) => console.log(err.error),
+        complete: () => saveMatchSubscription.unsubscribe(),
+      });
   }
 }

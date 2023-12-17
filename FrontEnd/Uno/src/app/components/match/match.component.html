@@ -2,6 +2,7 @@
   class="match-page-container"
   [style.background-image]="'url(assets/img/GabeBackground.jpg)'"
 >
+  <button class="save-match" (click)="SaveMatch()">SAVE MATCH</button>
   <div class="opponents-hands-wrapper">
     <div class="hand" *ngFor="let hand of opponentHandsLength; index as i">
       <app-card

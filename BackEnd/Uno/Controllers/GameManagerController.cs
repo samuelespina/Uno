@@ -256,7 +256,7 @@ namespace GameManagerService{
 
         [HttpGet]
         [Route("/api/[controller]/saveMatch")]
-        public async Task<IActionResult> SaveMatch([FromQuery] string token, [FromQuery] int playerId){
+        public async Task<IActionResult> SaveMatch([FromQuery] int playerId, [FromQuery] string token){
             string userId = await VerifyTokenCall(token);
 
             if(userId == "" || int.Parse(userId) != playerId)

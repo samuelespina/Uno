@@ -105,10 +105,8 @@
   background-color: rgba(255, 255, 255, 0.2);
 }
 
-.next {
-  position: relative;
-  top: 2.5rem;
-  left: 1rem;
+.next,
+.save-match {
   padding: 0.5rem;
   border-radius: 1rem;
   font-size: 1.1rem;
@@ -119,7 +117,26 @@
   font-weight: bold;
 }
 
+.next {
+  position: relative;
+  top: 2.5rem;
+  left: 1rem;
+}
+
 .next:hover {
+  transform: translateY(-0.2rem);
+  color: red;
+  background-color: white;
+}
+
+.save-match {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  z-index: 3;
+}
+
+.save-match:hover {
   transform: translateY(-0.2rem);
   color: red;
   background-color: white;
