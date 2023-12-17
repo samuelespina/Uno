@@ -29,7 +29,7 @@
             {{ playerId == 0 ? "You" : playerId }}
           </div>
         </ng-container>
-        <ng-container *ngIf="typeOfScoreboard == 2">
+        <ng-container *ngIf="typeOfScoreboard == 1">
           <div *ngFor="let playerName of leaderBoard[key]">
             {{ playerName }}
           </div>

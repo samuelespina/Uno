@@ -89,20 +89,6 @@ namespace GameManagerModel{
             throw new Exception("Scoreboard not found");
         }
 
-        public List<SortedList<int, List<int>>> TakeAllMyScoreBoards(int playerId){
-            List<SortedList<int, List<int>>> ScoreBoards = new();
-
-            _finishedMatches.ForEach((match)=>{ 
-                if(match.hostId == playerId){
-                    ScoreBoards.Add(match.ScoreBoard);
-                }
-            });
-
-            if(ScoreBoards.Count > 0) return ScoreBoards; 
-
-            throw new Exception("Scoreboards not found");
-        }
-
         public SortedList<decimal, List<string>> WatchLeaderBoard(){
             List<Player> players = new List<Player>();
 

@@ -36,8 +36,6 @@ export class ScoreboardService {
     return lastScoreboardSubject;
   }
 
-  TakeAllMyScoreboards() {}
-
   WatchLeaderBoard(params: HttpParams) {
     let leaderBoardSubject: Subject<ILeaderBoard> = new Subject<ILeaderBoard>();
 

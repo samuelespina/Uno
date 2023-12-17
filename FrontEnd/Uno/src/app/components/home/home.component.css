@@ -7,6 +7,31 @@
   align-items: center;
 }
 
+.leaderboard-button {
+  color: white;
+  position: absolute;
+  top: 1rem;
+  left: 1rem;
+  height: 3rem;
+  width: 3rem;
+  font-size: 1.5rem;
+  border-radius: 2rem;
+  background-color: black;
+  padding: 2rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition: all 0.2s ease-in-out;
+  cursor: pointer;
+  margin-bottom: 1rem;
+}
+
+.leaderboard-button:hover {
+  transform: translateY(-0.2rem);
+  color: red;
+  background-color: white;
+}
+
 .options-container {
   display: flex;
   flex-direction: column;
@@ -77,8 +102,13 @@ p {
   font-size: 2rem;
 }
 
-i {
-  font-size: 2.5rem;
+button > i {
+  font-size: 2rem;
   font-weight: bold;
   color: rgba(255, 255, 255, 0.9);
+  transition: all 0.2s ease-in-out;
+}
+
+button > i:hover {
+  scale: 1.2;
 }

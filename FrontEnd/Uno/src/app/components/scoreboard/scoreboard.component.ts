@@ -30,7 +30,7 @@ export class ScoreboardComponent implements OnInit {
     console.log(this.scoreboardService.typeOfScoreboard);
     this.typeOfScoreboard = this.scoreboardService.typeOfScoreboard;
     if (this.scoreboardService.typeOfScoreboard == 0) this.TakeLastScoreboard();
-    if (this.scoreboardService.typeOfScoreboard == 2) this.WatchLeaderBoard();
+    if (this.scoreboardService.typeOfScoreboard == 1) this.WatchLeaderBoard();
   }
 
   TakeLastScoreboard() {

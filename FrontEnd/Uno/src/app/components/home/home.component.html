@@ -2,8 +2,10 @@
   class="home-page-container"
   [style.background-image]="'url(assets/img/GabeBackground.jpg)'"
 >
-  <div (click)="ChangeTypeOfScoreboard(1)">see all your matches</div>
-  <div (click)="ChangeTypeOfScoreboard(2)">see the leaderboard</div>
+  <div class="leaderboard-button" (click)="ChangeTypeOfScoreboard(1)">
+    <i class="fa-solid fa-ranking-star"></i>
+  </div>
+
   <div class="options-container">
     <button
       class="start"

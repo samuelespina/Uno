@@ -217,24 +217,6 @@ namespace GameManagerService{
         }
 
         [HttpGet]
-        [Route("/api/[controller]/takeAllMyScoreboards")]
-        public async Task<IActionResult> TakeAllMyScoreboards([FromQuery] int playerId, [FromQuery] string token){
-            string userId = await VerifyTokenCall(token);
-
-            if(userId == "" || int.Parse(userId) != playerId)
-            {
-                return Unauthorized("You're not verified");
-            }
-
-            try{
-                List<SortedList<int, List<int>>> lastScoreboard = _gameManager.TakeAllMyScoreBoards(playerId);
-                return Ok(JsonConvert.SerializeObject(lastScoreboard));
-            }catch(Exception e){
-                return BadRequest(e.Message);
-            }
-        }
-
-        [HttpGet]
         [Route("/api/[controller]/watchLeaderBoard")]
         public async Task<IActionResult> WatchLeaderBoard([FromQuery] int playerId, [FromQuery] string token){
             string userId = await VerifyTokenCall(token);
