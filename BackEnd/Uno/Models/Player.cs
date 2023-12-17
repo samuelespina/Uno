@@ -42,7 +42,7 @@ namespace PlayerModel{
                         Card cardToDiscard = _hand[cardIndex];
                         DiscardCard(cardToDiscard);
                         return cardToDiscard;
-                    }else if(_hand[cardIndex].Color == CardColor.Wild){
+                    }else if(_hand[cardIndex].Color == CardColor.Wild && _hand.Count != 1){
                         PlayerMoves.Add("discard");
                         Card cardToDiscard = _hand[cardIndex];
                         DiscardCard(cardToDiscard);

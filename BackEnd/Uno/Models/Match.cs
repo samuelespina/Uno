@@ -15,6 +15,7 @@ public enum RoundStatus{
 namespace MatchModel{
     public class Match{
         public List<Player> Players { get; private set; }
+        [JsonProperty]
         private Deck _deck;
         public List<Card> DiscardPile{ get; private set; }
         public int hostId { get;private set; }

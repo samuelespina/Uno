@@ -368,9 +368,11 @@ export class MatchComponent implements OnInit {
   }
 
   SaveMatch() {
-    const params: HttpParams = new HttpParams()
-      .set('playerId', localStorage.getItem('id')!)
-      .set('token', localStorage.getItem('token')!);
-    this.matchService.SaveMatch(params);
+    if (this.playingPlayerIndex == 0) {
+      const params: HttpParams = new HttpParams()
+        .set('playerId', localStorage.getItem('id')!)
+        .set('token', localStorage.getItem('token')!);
+      this.matchService.SaveMatch(params);
+    }
   }
 }

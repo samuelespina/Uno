@@ -3,11 +3,12 @@ import { MatchService } from '../../services/match.service';
 import { HttpParams } from '@angular/common/http';
 import { Subscription } from 'rxjs';
 import { Route, Router } from '@angular/router';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [],
+  imports: [CommonModule],
   templateUrl: './home.component.html',
   styleUrl: './home.component.css',
 })

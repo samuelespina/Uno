@@ -1,13 +1,32 @@
-<div class="home-page-container">
-  <button [disabled]="!startGameStatus" (click)="TakeYourMatch()">
-    start game
-  </button>
-  <div class="bot-number-selection">
-    <button (click)="AddOrSubtractBot('-')">-</button>
-    <p>{{ botNUmber }}</p>
-    <button (click)="AddOrSubtractBot('+')">+</button>
+<div
+  class="home-page-container"
+  [style.background-image]="'url(assets/img/GabeBackground.jpg)'"
+>
+  <div class="options-container">
+    <button
+      class="start"
+      [ngClass]="!startGameStatus ? 'disabled' : ''"
+      (click)="TakeYourMatch()"
+      [disabled]="!startGameStatus"
+    >
+      START NEW GAME
+    </button>
+    <div class="bot-number-selection">
+      <button (click)="AddOrSubtractBot('-')">
+        <i class="fa-solid fa-angle-left"></i>
+      </button>
+      <p>{{ botNUmber }}</p>
+      <button (click)="AddOrSubtractBot('+')">
+        <i class="fa-solid fa-angle-right"></i>
+      </button>
+    </div>
+    <button
+      class="resume"
+      [ngClass]="startGameStatus ? 'disabled' : ''"
+      (click)="TakeYourMatch()"
+      [disabled]="startGameStatus"
+    >
+      RESUME MATCH
+    </button>
   </div>
-  <button [disabled]="startGameStatus" (click)="TakeYourMatch()">
-    resume game
-  </button>
 </div>
