@@ -41,6 +41,34 @@
   transition: all 0.2s ease-in-out;
 }
 
+.uno-click-box-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+  stroke: red;
+  height: 10rem;
+  width: 10rem;
+  cursor: pointer;
+}
+
+.uno-click-box-container > p {
+  position: absolute;
+  margin-bottom: 0.5rem;
+}
+
+svg {
+  height: 150px;
+  width: 150px;
+  transform: rotate(-90deg);
+}
+
+circle {
+  stroke-dasharray: 156;
+  stroke-dashoffset: 156;
+  animation: load 3s infinite;
+}
+
 .chose-color-popup,
 .uno-popup-container {
   width: 100%;
@@ -161,4 +189,13 @@
   display: flex;
   justify-content: center;
   align-items: center;
+}
+
+@keyframes load {
+  50% {
+    stroke-dashoffset: 0;
+  }
+  100% {
+    stroke-dashoffset: -156;
+  }
 }

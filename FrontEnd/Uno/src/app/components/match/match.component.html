@@ -38,7 +38,12 @@
     <div class="uno-popup">
       <p>UNO!</p>
       <p>Hurry up and click here!</p>
-      <div class="uno-click-box-container"></div>
+      <div class="uno-click-box-container" (click)="UnoClick()">
+        <p>click</p>
+        <svg viewBox="0 0 100 100">
+          <circle cx="50" cy="50" r="25" stroke-width="8" fill="none" />
+        </svg>
+      </div>
     </div>
   </div>
 
