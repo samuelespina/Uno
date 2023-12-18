@@ -20,15 +20,25 @@
 
 .scoreboard {
   background-color: rgb(222, 0, 0);
-  width: 40%;
+  min-width: 50%;
   position: relative;
 }
 
 .scoreboard-rows-container {
   width: 80%;
+  gap: 0.4rem;
 }
 
 .scoreboard-row,
 .scoreboard-row-fields {
   width: 80%;
+}
+
+.scoreboard-row {
+  transition: all 0.2s ease-in-out;
+  width: 100%;
+}
+
+.scoreboard-row:hover {
+  scale: 1.05;
 }

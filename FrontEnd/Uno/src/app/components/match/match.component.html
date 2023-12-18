@@ -22,7 +22,6 @@
         [isHandCard]="false"
         [enemyOrNot]="true"
         (click)="DrawCard()"
-        [ngStyle]="{ rotate: '180deg' }"
         [ngStyle]="{ cursor: 'pointer' }"
       ></app-card>
       <app-card
@@ -102,7 +101,13 @@
       >
       </app-card>
     </div>
-    <button class="next" (click)="Next()">NEXT</button>
+    <button
+      class="next"
+      [ngClass]="!isMyTurn ? 'disabled' : ''"
+      (click)="Next()"
+    >
+      NEXT
+    </button>
     <p
       class="error-message"
       [ngClass]="errorMessageAnimation ? 'error-animation' : ''"

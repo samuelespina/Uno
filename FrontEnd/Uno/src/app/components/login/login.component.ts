@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { AuthService } from '../../services/auth.service';
-import { UserCredentials } from '../../Interfaces/UserCredentials.types';
+import { IUserCredentials } from '../../Interfaces/IUserCredentials.types';
 import { Subscription } from 'rxjs';
 
 @Component({
@@ -14,7 +14,7 @@ import { Subscription } from 'rxjs';
 })
 export class LoginComponent implements OnInit {
   loginForm!: FormGroup;
-  data!: UserCredentials;
+  data!: IUserCredentials;
   token: string = 'null';
   errorMessage: string = '';
 

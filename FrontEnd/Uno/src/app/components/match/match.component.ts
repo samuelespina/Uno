@@ -2,13 +2,13 @@ import { Component, OnInit } from '@angular/core';
 import { MatchService } from '../../services/match.service';
 import { HttpParams } from '@angular/common/http';
 import { Subscription, delay, timeout } from 'rxjs';
-import { Card } from '../../Interfaces/Card.types';
-import { StartGame } from '../../Interfaces/StartGame.types';
+import { ICard } from '../../Interfaces/ICard.types';
+import { IStartGame } from '../../Interfaces/IStartGame.types';
 import { CommonModule } from '@angular/common';
 import { CardComponent } from '../card/card.component';
-import { DiscardObj } from '../../Interfaces/DiscardObj.types';
-import { OpponentMove } from '../../Interfaces/OpponentMove.types';
-import { ChangeColorObj } from '../../Interfaces/ChangeColorObj.types';
+import { IDiscardObj } from '../../Interfaces/IDiscardObj.types';
+import { IOpponentMove } from '../../Interfaces/IOpponentMove.types';
+import { IChangeColorObj } from '../../Interfaces/IChangeColorObj.types';
 import { Router } from '@angular/router';
 import { ScoreboardComponent } from '../scoreboard/scoreboard.component';
 import { ScoreboardService } from '../../services/scoreboard.service';
@@ -21,10 +21,10 @@ import { ScoreboardService } from '../../services/scoreboard.service';
   imports: [CommonModule, CardComponent, ScoreboardComponent],
 })
 export class MatchComponent implements OnInit {
-  myHand!: Array<Card>;
+  myHand!: Array<ICard>;
   myHandCardCoordinates: Array<Array<number>> = [];
   opponentHandsLength!: Array<number>;
-  lastCard!: Card;
+  lastCard!: ICard;
   lastCardCoordinates: Array<Array<number>> = [];
   playingPlayerIndex: number = 0;
   changeColorDiscard: boolean = false;
@@ -47,7 +47,7 @@ export class MatchComponent implements OnInit {
       .set('token', localStorage.getItem('token')!);
 
     if (this.matchService.startGameStatus) {
-      const body: StartGame = {
+      const body: IStartGame = {
         botNumber: this.matchService.botNumber,
         playerId: parseInt(localStorage.getItem('id')!),
         name: localStorage.getItem('name')!,
@@ -236,7 +236,7 @@ export class MatchComponent implements OnInit {
 
   DiscardCard(cardIndex: number) {
     if (this.playingPlayerIndex == 0) {
-      const body: DiscardObj = {
+      const body: IDiscardObj = {
         playerId: parseInt(localStorage.getItem('id')!),
         cardIndex: cardIndex,
         token: localStorage.getItem('token')!,
@@ -342,10 +342,16 @@ export class MatchComponent implements OnInit {
     }
   }
 
-  async ShowAllOpponentsMoves(opponentsMoves: Array<OpponentMove>) {
+  async ShowAllOpponentsMoves(opponentsMoves: Array<IOpponentMove>) {
     this.isMyTurn = false;
     for (let i = 0; i < opponentsMoves.length; i++) {
-      this.wildColor = opponentsMoves[i].WildColor;
+      if (opponentsMoves[i].WildColor == 'Yellow') {
+        this.wildColor = 'orange';
+      } else {
+        this.wildColor = opponentsMoves[i].WildColor;
+      }
+
+      console.log(this.wildColor);
 
       let playerId = opponentsMoves[i].PlayerId - 1;
       this.playingPlayerIndex = playerId;
@@ -372,7 +378,7 @@ export class MatchComponent implements OnInit {
   }
 
   ChangeColor(newColorIndex: number) {
-    const body: ChangeColorObj = {
+    const body: IChangeColorObj = {
       newColor: newColorIndex,
       playerId: parseInt(localStorage.getItem('id')!),
       token: localStorage.getItem('token')!,
@@ -381,7 +387,10 @@ export class MatchComponent implements OnInit {
     const changeColorSubscription: Subscription = this.matchService
       .ChangeColor(body)
       .subscribe({
-        next: (newColor) => (this.wildColor = newColor),
+        next: (newColor) => {
+          this.wildColor = newColor;
+          if (this.wildColor == 'yellow') this.wildColor = 'orange';
+        },
         error: (err) => console.log(err.error),
         complete: () => changeColorSubscription.unsubscribe(),
       });

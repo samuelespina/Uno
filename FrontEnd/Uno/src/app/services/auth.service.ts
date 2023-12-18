@@ -4,7 +4,7 @@ import { Subject, Subscription } from 'rxjs';
 import { ApiService } from './api.service';
 import { Router } from '@angular/router';
 import { environment } from '../../environments/environment';
-import { UserCredentials } from '../Interfaces/UserCredentials.types';
+import { IUserCredentials } from '../Interfaces/IUserCredentials.types';
 
 @Injectable({
   providedIn: 'root',
@@ -30,7 +30,7 @@ export class AuthService {
     }
   }
 
-  Login(body: UserCredentials) {
+  Login(body: IUserCredentials) {
     let callStatusSubject: Subject<boolean> = new Subject<boolean>();
 
     const tokenGenerationSubscription: Subscription = this.api

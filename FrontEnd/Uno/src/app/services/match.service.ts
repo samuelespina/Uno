@@ -3,12 +3,12 @@ import { ApiService } from './api.service';
 import { environment } from '../../environments/environment';
 import { Subject, Subscription } from 'rxjs';
 import { HttpParams } from '@angular/common/http';
-import { Card } from '../Interfaces/Card.types';
-import { StartGame } from '../Interfaces/StartGame.types';
+import { ICard } from '../Interfaces/ICard.types';
+import { IStartGame } from '../Interfaces/IStartGame.types';
 import { Params, Router } from '@angular/router';
-import { DiscardObj } from '../Interfaces/DiscardObj.types';
-import { OpponentMove } from '../Interfaces/OpponentMove.types';
-import { ChangeColorObj } from '../Interfaces/ChangeColorObj.types';
+import { IDiscardObj } from '../Interfaces/IDiscardObj.types';
+import { IOpponentMove } from '../Interfaces/IOpponentMove.types';
+import { IChangeColorObj } from '../Interfaces/IChangeColorObj.types';
 
 @Injectable({
   providedIn: 'root',
@@ -17,16 +17,16 @@ export class MatchService {
   startGameStatus!: boolean;
   botNumber!: number;
   errorMessage: string = '';
-  newCard!: Card;
-  playerNewCards!: Array<Card>;
+  newCard!: ICard;
+  playerNewCards!: Array<ICard>;
 
   constructor(private api: ApiService, private router: Router) {}
 
-  StartGame(body: StartGame) {
-    let myHandSubject: Subject<Array<Card>> = new Subject<Array<Card>>();
+  StartGame(body: IStartGame) {
+    let myHandSubject: Subject<Array<ICard>> = new Subject<Array<ICard>>();
 
     const startGameSubscription: Subscription = this.api
-      .Post<Array<Card>>(
+      .Post<Array<ICard>>(
         `${environment.apiGameEndpoint}/api/GameManager/startGame`,
         body
       )
@@ -40,10 +40,10 @@ export class MatchService {
   }
 
   Resume(params: HttpParams) {
-    let myHandSubject: Subject<Array<Card>> = new Subject<Array<Card>>();
+    let myHandSubject: Subject<Array<ICard>> = new Subject<Array<ICard>>();
 
     const startGameSubscription: Subscription = this.api
-      .Get<Array<Card>>(
+      .Get<Array<ICard>>(
         `${environment.apiGameEndpoint}/api/GameManager/resume`,
         { params }
       )
@@ -76,10 +76,10 @@ export class MatchService {
   }
 
   TakeLastCard(params: HttpParams) {
-    let TakeLastCardSubject: Subject<Card> = new Subject<Card>();
+    let TakeLastCardSubject: Subject<ICard> = new Subject<ICard>();
 
     const takeLastCardSubscription: Subscription = this.api
-      .Get<Card>(
+      .Get<ICard>(
         `${environment.apiGameEndpoint}/api/GameManager/takeLastCard`,
         {
           params,
@@ -98,7 +98,7 @@ export class MatchService {
     let callStatusSubject: Subject<boolean> = new Subject<boolean>();
 
     const drawCardSubscription: Subscription = this.api
-      .Get<Card>(`${environment.apiGameEndpoint}/api/GameManager/drawCard`, {
+      .Get<ICard>(`${environment.apiGameEndpoint}/api/GameManager/drawCard`, {
         params,
       })
       .subscribe({
@@ -116,7 +116,7 @@ export class MatchService {
     return callStatusSubject;
   }
 
-  DiscardCard(body: DiscardObj) {
+  DiscardCard(body: IDiscardObj) {
     let callStatusSubject: Subject<boolean> = new Subject<boolean>();
 
     const discardCardSubscription: Subscription = this.api
@@ -137,9 +137,12 @@ export class MatchService {
     let callStatusSubject: Subject<boolean> = new Subject<boolean>();
 
     const nextSubscription: Subscription = this.api
-      .Get<Array<Card>>(`${environment.apiGameEndpoint}/api/GameManager/next`, {
-        params,
-      })
+      .Get<Array<ICard>>(
+        `${environment.apiGameEndpoint}/api/GameManager/next`,
+        {
+          params,
+        }
+      )
       .subscribe({
         next: (playerNewCards) => {
           this.playerNewCards = playerNewCards;
@@ -156,12 +159,12 @@ export class MatchService {
   }
 
   OpponentAIMoves(params: HttpParams) {
-    let opponentHandLengthSubject: Subject<Array<OpponentMove>> = new Subject<
-      Array<OpponentMove>
+    let opponentHandLengthSubject: Subject<Array<IOpponentMove>> = new Subject<
+      Array<IOpponentMove>
     >();
 
     const opponentHandLengthSubscription: Subscription = this.api
-      .Get<Array<OpponentMove>>(
+      .Get<Array<IOpponentMove>>(
         `${environment.apiGameEndpoint}/api/GameManager/getOpponentAIGameMoves`,
         { params }
       )
@@ -174,7 +177,7 @@ export class MatchService {
     return opponentHandLengthSubject;
   }
 
-  ChangeColor(body: ChangeColorObj) {
+  ChangeColor(body: IChangeColorObj) {
     let newColorSubject: Subject<string> = new Subject<string>();
 
     const changeColorSubscription: Subscription = this.api

@@ -16,6 +16,8 @@ import { ScoreboardService } from '../../services/scoreboard.service';
 export class HomeComponent implements OnInit {
   startGameStatus: boolean = true;
   botNUmber: number = 1;
+  name!: string;
+  surname!: string;
 
   constructor(
     private matchService: MatchService,
@@ -24,6 +26,8 @@ export class HomeComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
+    this.name = localStorage.getItem('name')!;
+    this.surname = localStorage.getItem('surname')!;
     const params: HttpParams = new HttpParams()
       .set('playerId', localStorage.getItem('id')!)
       .set('token', localStorage.getItem('token')!);
@@ -53,5 +57,10 @@ export class HomeComponent implements OnInit {
   ChangeTypeOfScoreboard(type: number) {
     this.scoreboardService.ChangeTypeOfScoreboard(type);
     this.router.navigate(['scoreboard']);
+  }
+
+  Logout() {
+    localStorage.removeItem('token');
+    location.reload();
   }
 }

@@ -1,4 +1,4 @@
-export interface StartGame {
+export interface IStartGame {
   botNumber: number;
   playerId: number;
   name: string;

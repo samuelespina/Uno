@@ -140,7 +140,7 @@ circle {
   padding: 0.5rem;
   border-radius: 1rem;
   font-size: 1.1rem;
-  transition: all 0.2s ease-in-out;
+  transition: all 0.1s ease-in-out;
   border: none;
   background-color: black;
   color: white;
@@ -157,6 +157,11 @@ circle {
   transform: translateY(-0.2rem);
   color: red;
   background-color: white;
+}
+
+.disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
 }
 
 .save-match {

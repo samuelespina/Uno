@@ -75,7 +75,7 @@ namespace GameManagerService{
                     return Ok(JsonConvert.SerializeObject(newPlayerCards));
                 }catch(Exception e){
                     return BadRequest(e.Message);
-            }
+                }
             }
             return BadRequest();
         }
