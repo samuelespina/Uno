@@ -32,6 +32,8 @@ export class MatchComponent implements OnInit {
   isMyTurn: boolean = true;
   errorMessage: string = '';
   errorMessageAnimation: boolean = false;
+  unoPopup: boolean = false;
+  doYouClicked: boolean = false;
 
   constructor(
     private matchService: MatchService,
@@ -201,11 +203,12 @@ export class MatchComponent implements OnInit {
     this.lastCardCoordinates.push(cardCoordinates);
   }
 
-  DrawCard() {
+  DrawCard(typeOfDraw: boolean = false) {
     if (this.playingPlayerIndex == 0) {
       const params: HttpParams = new HttpParams()
         .set('playerId', localStorage.getItem('id')!)
-        .set('token', localStorage.getItem('token')!);
+        .set('token', localStorage.getItem('token')!)
+        .set('typeOfDraw', typeOfDraw);
 
       const drawCardSubscription: Subscription = this.matchService
         .DrawCard(params)
@@ -267,6 +270,16 @@ export class MatchComponent implements OnInit {
                     this.LastCardCalc();
                     if (lastCard.Color == 4) {
                       this.changeColorDiscard = true;
+                    }
+                    if (this.myHand.length == 1) {
+                      this.unoPopup = true;
+                      setTimeout(() => {
+                        this.unoPopup = false;
+                        if (!this.doYouClicked) {
+                          console.log('ciao');
+                          this.DrawCard(true);
+                        }
+                      }, 3000);
                     }
                   },
                   error: (err) => console.log(err),

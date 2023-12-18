@@ -34,6 +34,14 @@
     <div class="wild-color" [ngStyle]="{ 'background-color': wildColor }"></div>
   </div>
 
+  <div class="uno-popup-container" *ngIf="unoPopup">
+    <div class="uno-popup">
+      <p>UNO!</p>
+      <p>Hurry up and click here!</p>
+      <div class="uno-click-box-container"></div>
+    </div>
+  </div>
+
   <div class="chose-color-popup" *ngIf="changeColorDiscard">
     <div class="chose-a-color">
       <p>chose a color</p>

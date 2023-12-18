@@ -40,9 +40,9 @@ namespace GameManagerModel{
             throw new Exception("Match not found");
         }
 
-        public Card DrawCard(int playerId){
+        public Card DrawCard(int playerId, bool typeOfDraw){
             Match myMatch = FindMyMatch(playerId);
-            return myMatch.DrawCard();
+            return myMatch.DrawCard(1, typeOfDraw);
         }
 
         public void DiscardCard(int playerId, int cardIndex){

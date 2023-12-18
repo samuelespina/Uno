@@ -76,7 +76,7 @@ namespace PlayerModel{
         }
 
          public Card DrawCard(Deck deck, List<Card> DiscardPile, int numberOfCardsToDraw = 1,  bool configDraw = false){
-            if(PlayerMoves.Count > 0){
+            if(PlayerMoves.Count > 0 && !configDraw){
                 throw new Exception("you can't draw now!");
             }
             
