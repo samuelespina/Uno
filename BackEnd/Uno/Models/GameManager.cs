@@ -115,12 +115,16 @@ namespace GameManagerModel{
                         }
                     }
                 });
-                decimal average = numberOfMatchs / numberOfWins;
 
-                if(!leaderBoard.ContainsKey(average)){
+                if(numberOfWins != 0){
+                    decimal average = numberOfMatchs / numberOfWins;
+
+                    if(!leaderBoard.ContainsKey(average)){
                     leaderBoard[average] = new List<string>();
+                    }
+                    
+                    leaderBoard[average].Add($"{player.Name} {player.Surname}");
                 }
-                leaderBoard[average].Add($"{player.Name} {player.Surname}");
             });
 
             return leaderBoard;

@@ -42,8 +42,10 @@ export class ScoreboardComponent implements OnInit {
       .TakeLastScoreboard(params)
       .subscribe({
         next: (lastScoreboard) => {
+          console.log(lastScoreboard);
           (this.scoreBoard = lastScoreboard),
             (this.scoreboardKey = this.ObjectKeys(this.scoreBoard));
+          console.log(this.scoreboardKey);
         },
         error: (err) => console.log(err.error),
         complete: () => takeLastScoreboardSubscription,

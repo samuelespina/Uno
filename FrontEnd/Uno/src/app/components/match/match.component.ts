@@ -279,7 +279,7 @@ export class MatchComponent implements OnInit {
                           console.log('ciao');
                           this.DrawCard(true);
                         } else {
-                          this.doYouClicked = true;
+                          this.doYouClicked = false;
                         }
                       }, 3000);
                     }
@@ -400,6 +400,5 @@ export class MatchComponent implements OnInit {
   UnoClick() {
     this.doYouClicked = true;
     this.unoPopup = false;
-    this.Next();
   }
 }
